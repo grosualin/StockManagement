@@ -9,6 +9,7 @@ interface AuthUseCase {
 }
 
 class AuthUseCaseImpl @Inject constructor(private val authRepository: AuthRepository) : AuthUseCase {
+    
     override fun authenticate(username: String, password: String): Single<Boolean> {
         return authRepository.authenticate(username, password)
     }

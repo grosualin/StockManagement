@@ -1,7 +1,7 @@
 package ro.alingrosu.stockmanagement.domain.usecase
 
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.core.Flowable
 import ro.alingrosu.stockmanagement.domain.model.Product
 import ro.alingrosu.stockmanagement.domain.repository.ProductRepository
 import javax.inject.Inject
@@ -9,8 +9,8 @@ import javax.inject.Inject
 interface StockManagementUseCase {
     fun increaseStock(productId: Int, quantity: Int): Completable
     fun decreaseStock(productId: Int, quantity: Int): Completable
-    fun checkStockLevel(productId: Int): Single<Boolean>
-    fun getLowStockProducts(): Single<List<Product>>
+    fun checkStockLevel(productId: Int): Flowable<Boolean>
+    fun getLowStockProducts(): Flowable<List<Product>>
 }
 
 class StockManagementUseCaseImpl @Inject constructor(
@@ -33,11 +33,12 @@ class StockManagementUseCaseImpl @Inject constructor(
             }
     }
 
-    override fun checkStockLevel(productId: Int): Single<Boolean> {
+    override fun checkStockLevel(productId: Int): Flowable<Boolean> {
         return productRepository.getProductById(productId)
-            .toSingle()
             .map { it.currentStock < it.minStock }
     }
 
-    override fun getLowStockProducts() = productRepository.getLowStockProducts()
+    override fun getLowStockProducts(): Flowable<List<Product>> {
+        return productRepository.getLowStockProducts()
+    }
 }
