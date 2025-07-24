@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentDashboardBinding
 import ro.alingrosu.stockmanagement.presentation.state.UiState
-import ro.alingrosu.stockmanagement.presentation.ui.main.base.BaseFragment
+import ro.alingrosu.stockmanagement.presentation.ui.base.BaseFragment
 import ro.alingrosu.stockmanagement.presentation.util.Factory
 import ro.alingrosu.stockmanagement.presentation.util.getAppComponent
 

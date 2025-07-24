@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import ro.alingrosu.stockmanagement.domain.usecase.AuthUseCase
 import ro.alingrosu.stockmanagement.presentation.state.UiState
-import ro.alingrosu.stockmanagement.presentation.ui.main.base.BaseViewModel
+import ro.alingrosu.stockmanagement.presentation.ui.base.BaseViewModel
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(private val authUseCase: AuthUseCase) : BaseViewModel() {

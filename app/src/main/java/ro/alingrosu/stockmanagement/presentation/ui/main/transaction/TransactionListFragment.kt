@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentTransactionListBinding
-import ro.alingrosu.stockmanagement.presentation.ui.main.base.BaseFragment
-import ro.alingrosu.stockmanagement.presentation.ui.main.dashboard.DashboardViewModel
+import ro.alingrosu.stockmanagement.presentation.ui.base.BaseFragment
 import ro.alingrosu.stockmanagement.presentation.util.Factory
 import ro.alingrosu.stockmanagement.presentation.util.getAppComponent
 

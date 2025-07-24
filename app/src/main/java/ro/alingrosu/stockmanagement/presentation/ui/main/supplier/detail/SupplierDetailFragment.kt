@@ -2,16 +2,12 @@ package ro.alingrosu.stockmanagement.presentation.ui.main.supplier.detail
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ro.alingrosu.stockmanagement.R
-import ro.alingrosu.stockmanagement.databinding.FragmentDashboardBinding
-import ro.alingrosu.stockmanagement.databinding.FragmentStockManagementBinding
 import ro.alingrosu.stockmanagement.databinding.FragmentSupplierDetailBinding
-import ro.alingrosu.stockmanagement.presentation.ui.main.base.BaseFragment
-import ro.alingrosu.stockmanagement.presentation.ui.main.dashboard.DashboardViewModel
+import ro.alingrosu.stockmanagement.presentation.ui.base.BaseFragment
 import ro.alingrosu.stockmanagement.presentation.util.Factory
 import ro.alingrosu.stockmanagement.presentation.util.getAppComponent
 

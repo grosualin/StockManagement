@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import ro.alingrosu.stockmanagement.domain.usecase.DashboardUseCase
 import ro.alingrosu.stockmanagement.presentation.model.DashboardUiModel
 import ro.alingrosu.stockmanagement.presentation.state.UiState
-import ro.alingrosu.stockmanagement.presentation.ui.main.base.BaseViewModel
+import ro.alingrosu.stockmanagement.presentation.ui.base.BaseViewModel
 import javax.inject.Inject
 
 class DashboardViewModel @Inject constructor(
