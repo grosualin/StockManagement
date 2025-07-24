@@ -9,7 +9,7 @@ import ro.alingrosu.stockmanagement.domain.model.Transaction
 import ro.alingrosu.stockmanagement.domain.repository.TransactionRepository
 import javax.inject.Inject
 
-class TransactionRepositoryImpl(private val dao: TransactionDao) : TransactionRepository {
+class TransactionRepositoryImpl @Inject constructor(private val dao: TransactionDao) : TransactionRepository {
 
     override fun addTransaction(transaction: Transaction): Completable =
         dao.insertTransaction(transaction.toEntity())

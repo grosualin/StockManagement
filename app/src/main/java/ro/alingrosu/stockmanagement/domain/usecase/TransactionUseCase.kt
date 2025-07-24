@@ -14,7 +14,7 @@ interface TransactionUseCase {
     fun getRecentTransactions(limit: Int): Single<List<Transaction>>
 }
 
-class TransactionUseCaseImpl(
+class TransactionUseCaseImpl @Inject constructor(
     private val transactionRepository: TransactionRepository
 ) : TransactionUseCase {
 

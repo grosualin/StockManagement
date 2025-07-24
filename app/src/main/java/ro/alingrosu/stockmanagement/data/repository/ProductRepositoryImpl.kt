@@ -10,7 +10,7 @@ import ro.alingrosu.stockmanagement.domain.model.Product
 import ro.alingrosu.stockmanagement.domain.repository.ProductRepository
 import javax.inject.Inject
 
-class ProductRepositoryImpl(private val dao: ProductDao) : ProductRepository {
+class ProductRepositoryImpl @Inject constructor(private val dao: ProductDao) : ProductRepository {
 
     override fun addProduct(product: Product): Completable =
         dao.insertProduct(product.toEntity())

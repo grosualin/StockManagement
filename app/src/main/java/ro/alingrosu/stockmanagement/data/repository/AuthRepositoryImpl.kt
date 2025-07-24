@@ -5,7 +5,7 @@ import ro.alingrosu.stockmanagement.data.service.AuthService
 import ro.alingrosu.stockmanagement.domain.repository.AuthRepository
 import javax.inject.Inject
 
-class AuthRepositoryImpl(private val authService: AuthService) : AuthRepository {
+class AuthRepositoryImpl @Inject constructor(private val authService: AuthService) : AuthRepository {
 
     override fun authenticate(username: String, password: String): Single<Boolean> {
         return authService.authenticate(username, password)

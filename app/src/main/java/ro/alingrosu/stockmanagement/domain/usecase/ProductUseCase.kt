@@ -17,7 +17,7 @@ interface ProductUseCase {
     fun getLowStockProducts(): Single<List<Product>>
 }
 
-class ProductUseCaseImpl(
+class ProductUseCaseImpl @Inject constructor(
     private val productRepository: ProductRepository
 ) : ProductUseCase {
     override fun addProduct(product: Product) = productRepository.addProduct(product)

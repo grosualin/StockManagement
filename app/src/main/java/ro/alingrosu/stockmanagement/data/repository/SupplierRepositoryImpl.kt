@@ -10,7 +10,7 @@ import ro.alingrosu.stockmanagement.domain.model.Supplier
 import ro.alingrosu.stockmanagement.domain.repository.SupplierRepository
 import javax.inject.Inject
 
-class SupplierRepositoryImpl(private val dao: SupplierDao) : SupplierRepository {
+class SupplierRepositoryImpl @Inject constructor(private val dao: SupplierDao) : SupplierRepository {
 
     override fun addSupplier(supplier: Supplier): Completable =
         dao.insertSupplier(supplier.toEntity())

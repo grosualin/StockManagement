@@ -16,7 +16,7 @@ interface SupplierUseCase {
     fun searchSuppliers(query: String): Single<List<Supplier>>
 }
 
-class SupplierUseCaseImpl(
+class SupplierUseCaseImpl @Inject constructor(
     private val supplierRepository: SupplierRepository
 ) : SupplierUseCase {
     override fun addSupplier(supplier: Supplier) = supplierRepository.addSupplier(supplier)

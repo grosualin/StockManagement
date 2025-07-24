@@ -11,7 +11,7 @@ interface StockManagementUseCase {
     fun checkStockLevel(productId: Int): Single<Boolean>
 }
 
-class StockManagementUseCaseImpl(
+class StockManagementUseCaseImpl @Inject constructor(
     private val productRepository: ProductRepository
 ) : StockManagementUseCase {
     override fun increaseStock(productId: Int, quantity: Int): Completable {
