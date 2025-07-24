@@ -8,6 +8,8 @@ import ro.alingrosu.stockmanagement.domain.repository.SupplierRepository
 import ro.alingrosu.stockmanagement.domain.repository.TransactionRepository
 import ro.alingrosu.stockmanagement.domain.usecase.AuthUseCase
 import ro.alingrosu.stockmanagement.domain.usecase.AuthUseCaseImpl
+import ro.alingrosu.stockmanagement.domain.usecase.DashboardUseCase
+import ro.alingrosu.stockmanagement.domain.usecase.DashboardUseCaseUseCaseImpl
 import ro.alingrosu.stockmanagement.domain.usecase.ProductUseCase
 import ro.alingrosu.stockmanagement.domain.usecase.ProductUseCaseImpl
 import ro.alingrosu.stockmanagement.domain.usecase.StockManagementUseCase
@@ -49,5 +51,11 @@ class UseCasesModule {
     @Singleton
     fun provideStockManagementUseCases(productRepository: ProductRepository): StockManagementUseCase {
         return StockManagementUseCaseImpl(productRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDashboardUseCases(productRepository: ProductRepository, transactionRepository: TransactionRepository): DashboardUseCase {
+        return DashboardUseCaseUseCaseImpl(productRepository, transactionRepository)
     }
 }

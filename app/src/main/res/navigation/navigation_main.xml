@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/dashboardFragment">
 
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="ro.alingrosu.stockmanagement.presentation.ui.auth.login.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        android:id="@+id/dashboardFragment"
+        android:name="ro.alingrosu.stockmanagement.presentation.ui.main.dashboard.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
 </navigation>

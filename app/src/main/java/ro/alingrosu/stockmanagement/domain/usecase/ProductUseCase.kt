@@ -14,7 +14,6 @@ interface ProductUseCase {
     fun searchProducts(query: String): Single<List<Product>>
     fun getAllProducts(): Single<List<Product>>
     fun getProductById(id: Int): Maybe<Product>
-    fun getLowStockProducts(): Single<List<Product>>
 }
 
 class ProductUseCaseImpl @Inject constructor(
@@ -26,5 +25,4 @@ class ProductUseCaseImpl @Inject constructor(
     override fun searchProducts(query: String) = productRepository.searchProducts(query)
     override fun getAllProducts() = productRepository.getAllProducts()
     override fun getProductById(id: Int) = productRepository.getProductById(id)
-    override fun getLowStockProducts() = productRepository.getLowStockProducts()
 }
