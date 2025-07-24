@@ -10,6 +10,9 @@ import ro.alingrosu.stockmanagement.data.repository.ProductRepositoryImpl
 import ro.alingrosu.stockmanagement.data.repository.SupplierRepositoryImpl
 import ro.alingrosu.stockmanagement.data.repository.TransactionRepositoryImpl
 import ro.alingrosu.stockmanagement.data.service.AuthService
+import ro.alingrosu.stockmanagement.data.service.ProductService
+import ro.alingrosu.stockmanagement.data.service.SupplierService
+import ro.alingrosu.stockmanagement.data.service.TransactionService
 import ro.alingrosu.stockmanagement.domain.repository.AuthRepository
 import ro.alingrosu.stockmanagement.domain.repository.ProductRepository
 import ro.alingrosu.stockmanagement.domain.repository.SupplierRepository
@@ -25,13 +28,16 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideProductRepository(dao: ProductDao): ProductRepository = ProductRepositoryImpl(dao)
+    fun provideProductRepository(dao: ProductDao, api: ProductService): ProductRepository =
+        ProductRepositoryImpl(dao, api)
 
     @Provides
     @Singleton
-    fun provideSupplierRepository(dao: SupplierDao): SupplierRepository = SupplierRepositoryImpl(dao)
+    fun provideSupplierRepository(dao: SupplierDao, api: SupplierService): SupplierRepository =
+        SupplierRepositoryImpl(dao, api)
 
     @Provides
     @Singleton
-    fun provideTransactionRepository(dao: TransactionDao): TransactionRepository = TransactionRepositoryImpl(dao)
+    fun provideTransactionRepository(dao: TransactionDao, api: TransactionService): TransactionRepository =
+        TransactionRepositoryImpl(dao, api)
 }
