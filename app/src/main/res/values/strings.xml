@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">StockManagement</string>
+    <string name="email_phone">Email / phone</string>
+    <string name="email_phone_input">Email / phone</string>
+    <string name="password">Password</string>
+    <string name="password_input">Password</string>
+    <string name="login">Login</string>
 </resources>
