@@ -2,6 +2,7 @@ package ro.alingrosu.stockmanagement.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -12,6 +13,9 @@ interface TransactionDao {
 
     @Insert
     fun insertTransaction(transaction: TransactionEntity): Completable
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(transactions: List<TransactionEntity>): Completable
 
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getAllTransactions(): Single<List<TransactionEntity>>

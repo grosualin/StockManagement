@@ -10,12 +10,16 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import ro.alingrosu.stockmanagement.data.local.entity.SupplierEntity
+import ro.alingrosu.stockmanagement.data.local.entity.TransactionEntity
 
 @Dao
 interface SupplierDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSupplier(supplier: SupplierEntity): Completable
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(transactions: List<SupplierEntity>): Completable
 
     @Update
     fun updateSupplier(supplier: SupplierEntity): Completable

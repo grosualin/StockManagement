@@ -17,6 +17,9 @@ interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProduct(product: ProductEntity): Completable
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(transactions: List<ProductEntity>): Completable
+
     @Update
     fun updateProduct(product: ProductEntity): Completable
 
@@ -24,7 +27,7 @@ interface ProductDao {
     fun deleteProduct(product: ProductEntity): Completable
 
     @Query("DELETE FROM product WHERE id = :productId")
-    fun deleteProductByProductId(productId: Int): Completable
+    fun deleteProductById(productId: Int): Completable
 
     @Query("SELECT * FROM product WHERE name LIKE '%' || :query || '%'")
     fun searchProducts(query: String): Single<List<ProductEntity>>
