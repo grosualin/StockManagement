@@ -20,6 +20,7 @@ glide = "4.16.0"
 room = "2.7.2"
 dagger = "2.55"
 legacySupportV4 = "1.0.0"
+legacySupportV4Version = "1.0.0"
 
 [libraries]
 androidXAppCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidXAppCompat" }
@@ -50,6 +51,7 @@ room_rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
 room_compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4Version" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "androidGradlePlugin" }

@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(libs.bundles.app)
+    implementation(libs.legacy.support.v4)
     kapt(libs.bundles.kapt)
 
     testImplementation(libs.bundles.appTest)

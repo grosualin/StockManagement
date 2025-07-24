@@ -1,5 +1,6 @@
-package ro.alingrosu.stockmanagement.presentation.ui.auth
+package ro.alingrosu.stockmanagement.presentation.ui.auth.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.viewModels
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentLoginBinding
 import ro.alingrosu.stockmanagement.presentation.state.UiState
+import ro.alingrosu.stockmanagement.presentation.ui.main.MainActivity
 import ro.alingrosu.stockmanagement.presentation.util.Factory
 import ro.alingrosu.stockmanagement.presentation.util.getAppComponent
 
@@ -58,6 +60,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     binding.loading.isVisible = false
                     binding.buttonLogin.isEnabled = true
                     Toast.makeText(context, "Login success: ${uiState.data}", Toast.LENGTH_LONG).show()
+
+                    if (uiState.data == true) {
+                        val mainActivity = Intent(requireContext(), MainActivity::class.java)
+                        startActivity(mainActivity)
+                    }
                 }
 
                 is UiState.Error -> {

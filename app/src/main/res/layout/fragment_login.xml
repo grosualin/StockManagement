@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/email_phone_input"
             android:inputType="textEmailAddress"
+            android:text="admin"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -68,6 +69,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/password_input"
             android:inputType="textPassword"
+            android:text="open"
             android:textColor="@color/black"
             android:textSize="16sp" />
 

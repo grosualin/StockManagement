@@ -1,4 +1,4 @@
-package ro.alingrosu.stockmanagement.presentation.ui.auth
+package ro.alingrosu.stockmanagement.presentation.ui.auth.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
