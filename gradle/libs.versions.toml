@@ -1,32 +1,96 @@
 [versions]
-agp = "8.10.1"
-kotlin = "2.0.21"
-coreKtx = "1.16.0"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.9.2"
-activityCompose = "1.10.1"
-composeBom = "2024.09.00"
+androidGradlePlugin = "8.10.1"
+androidXAppCompat = "1.7.1"
+androidXConstraintLayout = "2.2.1"
+androidXCore = "1.16.0"
+androidXFragment = "1.8.8"
+androidXLifecycle = "2.9.2"
+androidXNavigation = "2.9.2"
+androidXRecyclerView = "1.4.0"
+androidXTest = "1.7.2"
+androidXTestExtJUnit = "1.2.1"
+jUnit = "4.13.2"
+kotlin = "2.1.20"
+materialComponents = "1.12.0"
+rxjava = "3.1.10"
+rxandroid = "3.0.2"
+retrofit = "2.9.0"
+okhttp = "4.12.0"
+glide = "4.16.0"
+room = "2.7.2"
+dagger = "2.55"
+legacySupportV4 = "1.0.0"
 
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidXAppCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidXAppCompat" }
+androidXConstraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidXConstraintLayout" }
+androidXCore = { module = "androidx.core:core-ktx", version.ref = "androidXCore" }
+androidXFragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidXFragment" }
+androidXLifecycleLiveData = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidXLifecycle" }
+androidXLifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidXLifecycle" }
+androidXNavigationFragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidXNavigation" }
+androidXNavigationUi = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidXNavigation" }
+androidXNavigationRuntime = { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "androidXNavigation" }
+androidXRecyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "androidXRecyclerView" }
+androidXTestExtJUnit = { module = "androidx.test.ext:junit", version.ref = "androidXTestExtJUnit" }
+androidXTestMonitor = { module = "androidx.test:monitor", version.ref = "androidXTest" }
+jUnit = { module = "junit:junit", version.ref = "jUnit" }
+kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+materialComponents = { module = "com.google.android.material:material", version.ref = "materialComponents" }
+rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
+rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+retrofit-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "retrofit" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+room_runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room_rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
+room_compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+androidApplication = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+androidXNavigation = { id = "androidx.navigation.safeargs", version.ref = "androidXNavigation" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 
+[bundles]
+app = [
+    "androidXAppCompat",
+    "androidXConstraintLayout",
+    "androidXCore",
+    "androidXFragment",
+    "androidXLifecycleLiveData",
+    "androidXLifecycleViewModel",
+    "androidXNavigationFragment",
+    "androidXNavigationUi",
+    "androidXRecyclerView",
+    "kotlin",
+    "materialComponents",
+    "rxjava",
+    "rxandroid",
+    "retrofit",
+    "converter-gson",
+    "okhttp",
+    "retrofit-rxjava3",
+    "glide",
+    "room_runtime",
+    "room_ktx",
+    "room_rxjava3",
+    "dagger"
+]
+kapt = [
+    "room_compiler",
+    "dagger_compiler"
+]
+appTest = [
+    "jUnit"
+]
+appAndroidTest = [
+    "androidXTestExtJUnit",
+    "androidXTestMonitor",
+    "jUnit"
+]
