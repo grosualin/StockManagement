@@ -13,10 +13,11 @@ import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentLoginBinding
 import ro.alingrosu.stockmanagement.presentation.state.UiState
 import ro.alingrosu.stockmanagement.presentation.ui.main.MainActivity
+import ro.alingrosu.stockmanagement.presentation.ui.main.base.BaseFragment
 import ro.alingrosu.stockmanagement.presentation.util.Factory
 import ro.alingrosu.stockmanagement.presentation.util.getAppComponent
 
-class LoginFragment : Fragment(R.layout.fragment_login) {
+class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     private lateinit var binding: FragmentLoginBinding
 
@@ -36,19 +37,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView()
-        listenFoUiState()
-    }
-
-    private fun initView() {
+    override fun initView() {
         binding.buttonLogin.setOnClickListener {
             val (user, pass) = binding.emailPhoneInput.text.toString() to binding.passInput.text.toString()
             viewModel.login(user, pass)
         }
     }
 
-    private fun listenFoUiState() {
+    override fun listenFoUiState() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 is UiState.Loading -> {

@@ -10,4 +10,44 @@
         android:name="ro.alingrosu.stockmanagement.presentation.ui.main.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="ro.alingrosu.stockmanagement.presentation.ui.main.product.list.ProductListFragment"
+        android:label="fragment_product_list"
+        tools:layout="@layout/fragment_product_list">
+        <action
+            android:id="@+id/action_productListFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="ro.alingrosu.stockmanagement.presentation.ui.main.product.detail.ProductDetailFragment"
+        android:label="fragment_product_detail"
+        tools:layout="@layout/fragment_product_detail" />
+    <fragment
+        android:id="@+id/supplierListFragment"
+        android:name="ro.alingrosu.stockmanagement.presentation.ui.main.supplier.list.SupplierListFragment"
+        android:label="fragment_supplier_list"
+        tools:layout="@layout/fragment_supplier_list">
+        <action
+            android:id="@+id/action_supplierListFragment_to_supplierDetailFragment"
+            app:destination="@id/supplierDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/supplierDetailFragment"
+        android:name="ro.alingrosu.stockmanagement.presentation.ui.main.supplier.detail.SupplierDetailFragment"
+        android:label="fragment_supplier_detail"
+        tools:layout="@layout/fragment_supplier_detail" />
+    <fragment
+        android:id="@+id/transactionListFragment"
+        android:name="ro.alingrosu.stockmanagement.presentation.ui.main.transaction.TransactionListFragment"
+        android:label="fragment_transaction_list"
+        tools:layout="@layout/fragment_transaction_list" />
+    <fragment
+        android:id="@+id/stockManagementFragment"
+        android:name="ro.alingrosu.stockmanagement.presentation.ui.main.stock.StockManagementFragment"
+        android:label="fragment_stock_management"
+        tools:layout="@layout/fragment_stock_management" />
+
+
 </navigation>

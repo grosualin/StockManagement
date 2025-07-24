@@ -11,10 +11,11 @@ import androidx.fragment.app.viewModels
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentDashboardBinding
 import ro.alingrosu.stockmanagement.presentation.state.UiState
+import ro.alingrosu.stockmanagement.presentation.ui.main.base.BaseFragment
 import ro.alingrosu.stockmanagement.presentation.util.Factory
 import ro.alingrosu.stockmanagement.presentation.util.getAppComponent
 
-class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
+class DashboardFragment : BaseFragment(R.layout.fragment_dashboard) {
 
     private lateinit var binding: FragmentDashboardBinding
 
@@ -34,16 +35,10 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView()
-        listenFoUiState()
+    override fun initView() {
     }
 
-    private fun initView() {
-
-    }
-
-    private fun listenFoUiState() {
+    override fun listenFoUiState() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 is UiState.Loading -> {

@@ -1,4 +1,4 @@
-package ro.alingrosu.stockmanagement.presentation.ui
+package ro.alingrosu.stockmanagement.presentation.ui.main.base
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
