@@ -16,7 +16,7 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(context: Context): StockDatabase {
-        context.deleteDatabase("stock.db")
+//        context.deleteDatabase("stock.db")
 
         val db = Room.databaseBuilder(context, StockDatabase::class.java, "stock.db")
             .fallbackToDestructiveMigration()

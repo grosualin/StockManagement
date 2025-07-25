@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:padding="16dp">
+    android:padding="@dimen/margin_small">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutLowStockItems"
@@ -40,13 +40,13 @@
             android:id="@+id/tvLowStockItemsEmpty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="@dimen/margin_small"
             android:gravity="center"
             android:text="@string/no_low_stock_items"
             android:textSize="18sp"
             android:textStyle="italic"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/tvLowStockItems" />
+            app:layout_constraintTop_toBottomOf="@id/rvLowStockItems" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/loadingLowStockItems"
@@ -95,7 +95,7 @@
             android:id="@+id/tvRecentTransactionsEmpty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="@dimen/margin_small"
             android:gravity="center"
             android:text="@string/no_recent_transactions"
             android:textSize="18sp"

@@ -29,11 +29,11 @@ interface AppComponent {
 
     val dashboardViewModel: DashboardViewModel
 
-    val productDetailViewModel: ProductDetailViewModel
     val productListViewModel: ProductListViewModel
+    val productDetailViewModel: ProductDetailViewModel
 
-    val supplierDetailViewModel: SupplierDetailViewModel
     val supplierListViewModel: SupplierListViewModel
+    val supplierDetailViewModel: SupplierDetailViewModel
 
     val stockManagementViewModel: StockManagementViewModel
 

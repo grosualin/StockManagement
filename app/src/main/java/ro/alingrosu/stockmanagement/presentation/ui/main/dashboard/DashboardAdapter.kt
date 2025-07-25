@@ -82,5 +82,4 @@ class DashboardAdapter(
             return oldItem == newItem
         }
     }
-
 }

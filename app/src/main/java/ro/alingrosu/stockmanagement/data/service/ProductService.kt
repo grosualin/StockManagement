@@ -29,7 +29,7 @@ class ProductMockServiceImpl : ProductService {
         ProductDto(8, "Mock Product 8", "Product description 8", 1577.0, "Category4", "Barcode8", 5, 15, 5),
         ProductDto(9, "Mock Product 9", "Product description 9", 21.0, "Category2", "Barcode9", 4, 30, 5),
         ProductDto(10, "Mock Product 10", "Product description 10", 13.0, "Category5", "Barcode10", 3, 40, 5),
-        ProductDto(11, "Mock Product 11", "Product description 11", 33.0, "Category6", "Barcode11", 6, 60, 5),
+        ProductDto(11, "Mock Product 11", "Product description 11", 33.0, "Category6", "Barcode11", 5, 60, 5),
     )
 
     override fun postProduct(product: ProductDto): Completable {
