@@ -10,4 +10,12 @@
     <string name="menu_suppliers">Suppliers</string>
     <string name="menu_transactions">Transactions</string>
     <string name="menu_stock_management">Stock</string>
+    <string name="low_stock_items">Low stock items</string>
+    <string name="stock">Stock:</string>
+    <string name="min_stock">Min. stock:</string>
+    <string name="no_low_stock_items">No low stock items</string>
+    <string name="no_recent_transactions">No recent transactions</string>
+    <string name="recent_transactions">Recent transactions</string>
+    <string name="qty">Qty:</string>
+    <string name="type">Type:</string>
 </resources>

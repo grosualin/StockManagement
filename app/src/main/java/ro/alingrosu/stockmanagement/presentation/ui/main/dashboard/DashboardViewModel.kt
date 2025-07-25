@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import ro.alingrosu.stockmanagement.domain.usecase.DashboardUseCase
+import ro.alingrosu.stockmanagement.presentation.mapper.toUiModel
 import ro.alingrosu.stockmanagement.presentation.model.DashboardUiModel
 import ro.alingrosu.stockmanagement.presentation.state.UiState
 import ro.alingrosu.stockmanagement.presentation.ui.base.BaseViewModel
@@ -19,10 +20,10 @@ class DashboardViewModel @Inject constructor(
 
     fun loadData() {
         compositeDisposable.add(
-            dashboardUseCase.getDashboardData()
+            dashboardUseCase.getDashboardData(5)
                 .subscribeOn(Schedulers.io())
                 .map {
-                    DashboardUiModel(it.first, it.second)
+                    DashboardUiModel(it.first.toUiModel(), it.second.toUiModel())
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {

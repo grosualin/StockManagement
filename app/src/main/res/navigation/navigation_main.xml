@@ -9,7 +9,11 @@
         android:id="@+id/dashboardFragment"
         android:name="ro.alingrosu.stockmanagement.presentation.ui.main.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboardFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/productListFragment"
         android:name="ro.alingrosu.stockmanagement.presentation.ui.main.product.list.ProductListFragment"
@@ -23,7 +27,11 @@
         android:id="@+id/productDetailFragment"
         android:name="ro.alingrosu.stockmanagement.presentation.ui.main.product.detail.ProductDetailFragment"
         android:label="fragment_product_detail"
-        tools:layout="@layout/fragment_product_detail" />
+        tools:layout="@layout/fragment_product_detail">
+        <argument
+            android:name="product"
+            app:argType="ro.alingrosu.stockmanagement.presentation.model.ProductUi" />
+    </fragment>
     <fragment
         android:id="@+id/supplierListFragment"
         android:name="ro.alingrosu.stockmanagement.presentation.ui.main.supplier.list.SupplierListFragment"
