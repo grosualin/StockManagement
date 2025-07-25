@@ -9,6 +9,11 @@ data class Transaction(
     val notes: String
 )
 
-enum class TransactionType {
-    RESTOCK, SALE
+enum class TransactionType(val value: String) {
+    RESTOCK("restock"),
+    SALE("sale");
+
+    companion object {
+        fun fromValue(value: String): TransactionType = entries.first { it.value == value }
+    }
 }

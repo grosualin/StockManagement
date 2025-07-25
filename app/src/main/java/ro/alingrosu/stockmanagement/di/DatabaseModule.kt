@@ -15,10 +15,14 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(context: Context): StockDatabase =
-        Room.databaseBuilder(context, StockDatabase::class.java, "stock.db")
+    fun provideDatabase(context: Context): StockDatabase {
+        context.deleteDatabase("stock.db")
+
+        val db = Room.databaseBuilder(context, StockDatabase::class.java, "stock.db")
             .fallbackToDestructiveMigration()
             .build()
+        return db
+    }
 
     @Provides
     fun provideProductDao(db: StockDatabase): ProductDao = db.productDao()

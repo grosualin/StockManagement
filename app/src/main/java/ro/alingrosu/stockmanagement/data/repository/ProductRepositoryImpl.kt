@@ -2,6 +2,8 @@ package ro.alingrosu.stockmanagement.data.repository
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Single
 import ro.alingrosu.stockmanagement.data.local.dao.ProductDao
 import ro.alingrosu.stockmanagement.data.mapper.toDomain
 import ro.alingrosu.stockmanagement.data.mapper.toDto
@@ -32,37 +34,33 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override fun searchProducts(query: String): Flowable<List<Product>> {
-        val local = localDataSource.searchProducts(query).map { products -> products.map { it.toDomain() } }.toFlowable()
+        val local = localDataSource.searchProducts(query).map { products -> products.map { it.toDomain() } }
         val remote = remoteDataSource.searchProducts(query)
-            .map { suppliers -> suppliers.map { it.toDomain() } }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+            .map { product -> product.map { it.toDomain() } }
+        return Single.concatArrayEager(local, remote)
     }
 
     override fun getAllProducts(): Flowable<List<Product>> {
-        val local = localDataSource.getAllProducts().map { products -> products.map { it.toDomain() } }.toFlowable()
+        val local = localDataSource.getAllProducts().map { products -> products.map { it.toDomain() } }
         val remote = remoteDataSource.fetchAllProducts()
             .doOnSuccess { products -> localDataSource.insertAll(products.map { it.toEntity() }).subscribe() }
-            .map { suppliers -> suppliers.map { it.toDomain() } }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+            .map { product -> product.map { it.toDomain() } }
+        return Single.concatArrayEager(local, remote)
     }
 
     override fun getProductById(id: Int): Flowable<Product> {
-        val local = localDataSource.getProductById(id).map { it.toDomain() }.toFlowable()
+        val local = localDataSource.getProductById(id).map { it.toDomain() }
         val remote = remoteDataSource.fetchProductById(id)
             .doOnSuccess { product -> localDataSource.updateProduct(product.toEntity()).subscribe() }
             .map { product -> product.toDomain() }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+        return Maybe.concatArrayEager(local, remote)
     }
 
     override fun getLowStockProducts(): Flowable<List<Product>> {
-        val local = localDataSource.getLowStockProducts().map { products -> products.map { it.toDomain() } }.toFlowable()
+        val local = localDataSource.getLowStockProducts().map { products -> products.map { it.toDomain() } }
         val remote = remoteDataSource.fetchLowStockProducts()
             .doOnSuccess { products -> localDataSource.insertAll(products.map { it.toEntity() }).subscribe() }
-            .map { suppliers -> suppliers.map { it.toDomain() } }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+            .map { product -> product.map { it.toDomain() } }
+        return Single.concatArrayEager(local, remote)
     }
 }

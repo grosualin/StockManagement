@@ -1,9 +1,20 @@
 package ro.alingrosu.stockmanagement.data.local.entity
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "transactions")
+@Entity(
+    tableName = "transactions",
+    foreignKeys = [
+        ForeignKey(
+            entity = ProductEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["productId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class TransactionEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val date: Long,
