@@ -15,10 +15,10 @@ import ro.alingrosu.stockmanagement.data.local.entity.TransactionEntity
 @Dao
 interface SupplierDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertSupplier(supplier: SupplierEntity): Completable
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(suppliers: List<SupplierEntity>): Completable
 
     @Update

@@ -2,6 +2,7 @@ package ro.alingrosu.stockmanagement.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import dagger.Module
 import dagger.Provides
 import ro.alingrosu.stockmanagement.data.local.StockDatabase
@@ -17,9 +18,9 @@ class DatabaseModule {
     @Singleton
     fun provideDatabase(context: Context): StockDatabase {
 //        context.deleteDatabase("stock.db")
-
         val db = Room.databaseBuilder(context, StockDatabase::class.java, "stock.db")
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(true)
+            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
         return db
     }

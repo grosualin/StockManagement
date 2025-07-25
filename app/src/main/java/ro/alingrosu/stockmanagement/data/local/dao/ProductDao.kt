@@ -16,10 +16,10 @@ import ro.alingrosu.stockmanagement.data.local.entity.ProductWithSupplierEntity
 @Dao
 interface ProductDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertProduct(product: ProductEntity): Completable
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(products: List<ProductEntity>): Completable
 
     @Update

@@ -2,6 +2,9 @@ package ro.alingrosu.stockmanagement.data.repository
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import ro.alingrosu.stockmanagement.data.local.dao.SupplierDao
 import ro.alingrosu.stockmanagement.data.mapper.toDomain
 import ro.alingrosu.stockmanagement.data.mapper.toDto
@@ -19,41 +22,49 @@ class SupplierRepositoryImpl @Inject constructor(
     override fun addSupplier(supplier: Supplier): Completable {
         return remoteDataSource.postSupplier(supplier.toDto())
             .andThen(localDataSource.insertSupplier(supplier.toEntity()).onErrorComplete())
+            .subscribeOn(Schedulers.io())
     }
 
     override fun updateSupplier(supplier: Supplier): Completable {
         return remoteDataSource.updateSupplier(supplier.toDto())
             .andThen(localDataSource.updateSupplier(supplier.toEntity()).onErrorComplete())
+            .subscribeOn(Schedulers.io())
     }
 
     override fun deleteSupplierBySupplierId(supplierId: Int): Completable {
         return remoteDataSource.deleteSupplierById(supplierId)
             .andThen(localDataSource.deleteSupplierById(supplierId).onErrorComplete())
+            .subscribeOn(Schedulers.io())
     }
 
     override fun searchSuppliers(query: String): Flowable<List<Supplier>> {
-        val local = localDataSource.searchSuppliers(query).map { suppliers -> suppliers.map { it.toDomain() } }.toFlowable()
+        val local = localDataSource.searchSuppliers(query)
+            .subscribeOn(Schedulers.io())
+            .map { suppliers -> suppliers.map { it.toDomain() } }
         val remote = remoteDataSource.searchSuppliers(query)
             .map { suppliers -> suppliers.map { it.toDomain() } }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+        return Single.concatArrayEager(local, remote)
+            .map { it.sortedBy { supplier -> supplier.name } }
     }
 
     override fun getAllSuppliers(): Flowable<List<Supplier>> {
-        val local = localDataSource.getAllSuppliers().map { suppliers -> suppliers.map { it.toDomain() } }.toFlowable()
+        val local = localDataSource.getAllSuppliers()
+            .subscribeOn(Schedulers.io())
+            .map { suppliers -> suppliers.map { it.toDomain() } }
         val remote = remoteDataSource.fetchAllSuppliers()
             .doOnSuccess { suppliers -> localDataSource.insertAll(suppliers.map { it.toEntity() }).subscribe() }
             .map { suppliers -> suppliers.map { it.toDomain() } }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+        return Single.concatArrayEager(local, remote)
+            .map { it.sortedBy { supplier -> supplier.id } }
     }
 
     override fun getSupplierById(id: Int): Flowable<Supplier> {
-        val local = localDataSource.getSupplierById(id).map { it.toDomain() }.toFlowable()
+        val local = localDataSource.getSupplierById(id)
+            .subscribeOn(Schedulers.io())
+            .map { it.toDomain() }
         val remote = remoteDataSource.fetchSupplierById(id)
             .doOnSuccess { supplier -> localDataSource.updateSupplier(supplier.toEntity()).subscribe() }
             .map { supplier -> supplier.toDomain() }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+        return Maybe.concatArrayEager(local, remote)
     }
 }

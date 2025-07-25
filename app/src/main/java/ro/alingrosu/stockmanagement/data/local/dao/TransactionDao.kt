@@ -17,7 +17,7 @@ interface TransactionDao {
     fun insertTransaction(transaction: TransactionEntity): Completable
 
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(transactions: List<TransactionEntity>): Completable
 
     @Transaction

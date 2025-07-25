@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
     indices = [Index("productId")]
 )
 data class TransactionEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = false) val id: Int = 0,
     val date: Long,
     val type: String, // "restock" or "sale"
     val productId: Int,

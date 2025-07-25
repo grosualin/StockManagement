@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import ro.alingrosu.stockmanagement.data.local.dao.ProductDao
 import ro.alingrosu.stockmanagement.data.local.dao.SupplierDao
 import ro.alingrosu.stockmanagement.data.local.dao.TransactionDao
@@ -73,52 +74,56 @@ class TransactionRepositoryImpl @Inject constructor(
         return localDataSourceSupplier.insertAll(transactions.map { it.product.supplier.toEntity() })
             .andThen(localDataSourceProduct.insertAll(transactions.map { it.product.toEntity() }))
             .andThen(localDataSourceTransaction.insertAll(transactions.map { it.toEntity() }))
+            .subscribeOn(Schedulers.io())
     }
 
     override fun addTransaction(transaction: Transaction): Completable {
         return remoteDataSourceTransaction.postTransaction(transaction.toDto())
             .andThen(localDataSourceTransaction.insertTransaction(transaction.toEntity()))
+            .subscribeOn(Schedulers.io())
     }
 
     override fun getAllTransactions(): Flowable<List<Transaction>> {
-        val local = localDataSourceTransaction.getAllTransactions().map { transactions -> transactions.map { it.toDomain() } }.toFlowable()
+        val local = localDataSourceTransaction.getAllTransactions()
+            .subscribeOn(Schedulers.io())
+            .map { transactions -> transactions.map { it.toDomain() } }
         val remote = remoteDataSourceTransaction.fetchAllTransactions()
             .mapToTransactionWithProduct()
             .doOnSuccess { transactionsWithProducts -> updateDb(transactionsWithProducts).subscribe() }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+        return Single.concatArrayEager(local, remote)
+            .map { it.sortedByDescending { transaction -> transaction.date } }
     }
 
     override fun getTransactionsByType(type: String): Flowable<List<Transaction>> {
-        val local =
-            localDataSourceTransaction.getTransactionsByType(type).map { transactions -> transactions.map { it.toDomain() } }.toFlowable()
+        val local = localDataSourceTransaction.getTransactionsByType(type)
+            .subscribeOn(Schedulers.io())
+            .map { transactions -> transactions.map { it.toDomain() } }
         val remote = remoteDataSourceTransaction.fetchTransactionsByType(type)
             .mapToTransactionWithProduct()
             .doOnSuccess { transactionsWithProducts -> updateDb(transactionsWithProducts).subscribe() }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+        return Single.concatArrayEager(local, remote)
+            .map { it.sortedByDescending { transaction -> transaction.date } }
     }
 
     override fun getRecentTransactions(limit: Int): Flowable<List<Transaction>> {
         val local = localDataSourceTransaction.getRecentTransactions(limit)
+            .subscribeOn(Schedulers.io())
             .map { transactions -> transactions.map { it.toDomain() } }
-            .toFlowable()
         val remote = remoteDataSourceTransaction.fetchRecentTransactions(limit)
             .mapToTransactionWithProduct()
             .doOnSuccess { transactionsWithProducts -> updateDb(transactionsWithProducts).subscribe() }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+        return Single.concatArrayEager(local, remote)
+            .map { it.sortedByDescending { transaction -> transaction.date } }
     }
 
     override fun getTransactionsByProductId(productId: Int): Flowable<List<Transaction>> {
-        val local =
-            localDataSourceTransaction.getTransactionsByProductId(productId)
-                .map { transactions -> transactions.map { it.toDomain() } }
-                .toFlowable()
+        val local = localDataSourceTransaction.getTransactionsByProductId(productId)
+            .subscribeOn(Schedulers.io())
+            .map { transactions -> transactions.map { it.toDomain() } }
         val remote = remoteDataSourceTransaction.fetchTransactionsByProductId(productId)
             .mapToTransactionWithProduct()
             .doOnSuccess { transactionsWithProducts -> updateDb(transactionsWithProducts).subscribe() }
-            .toFlowable()
-        return Flowable.concatArrayEager(local, remote)
+        return Single.concatArrayEager(local, remote)
+            .map { it.sortedByDescending { transaction -> transaction.date } }
     }
 }

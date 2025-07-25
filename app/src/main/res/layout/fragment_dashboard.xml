@@ -29,9 +29,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvLowStockItems"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvLowStockItems"
             tools:itemCount="30"
             tools:listitem="@layout/item_low_stock_product" />
@@ -84,9 +85,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecentTransactions"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvRecentTransactions"
             tools:itemCount="3"
             tools:listitem="@layout/item_recent_transaction" />

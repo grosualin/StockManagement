@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import ro.alingrosu.stockmanagement.data.local.dao.ProductDao
 import ro.alingrosu.stockmanagement.data.local.dao.SupplierDao
 import ro.alingrosu.stockmanagement.data.mapper.toDomain
@@ -55,44 +56,54 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     private fun updateDb(products: List<Product>): Completable {
-        return localDataSourceSupplier.insertAll(products.map { it.supplier.toEntity() })
+        return localDataSourceSupplier.insertAll(products.map { it.supplier.toEntity() }.distinct())
             .andThen(localDataSourceProduct.insertAll(products.map { it.toEntity() }))
+            .subscribeOn(Schedulers.io())
     }
 
     override fun addProduct(product: Product): Completable {
         return remoteDataSourceProduct.postProduct(product.toDto())
             .andThen(localDataSourceProduct.insertProduct(product.toEntity()).onErrorComplete())
+            .subscribeOn(Schedulers.io())
     }
 
     override fun updateProduct(product: Product): Completable {
         return remoteDataSourceProduct.updateProduct(product.toDto())
             .andThen(localDataSourceProduct.updateProduct(product.toEntity()).onErrorComplete())
+            .subscribeOn(Schedulers.io())
     }
 
     override fun deleteProductByProductId(productId: Int): Completable {
         return remoteDataSourceProduct.deleteProductById(productId)
             .andThen(localDataSourceProduct.deleteProductById(productId).onErrorComplete())
+            .subscribeOn(Schedulers.io())
     }
 
     override fun searchProducts(query: String): Flowable<List<Product>> {
-        val local = localDataSourceProduct.searchProducts(query).map { products -> products.map { it.toDomain() } }
+        val local = localDataSourceProduct.searchProducts(query)
+            .subscribeOn(Schedulers.io())
+            .map { products -> products.map { it.toDomain() } }
         val remote = remoteDataSourceProduct.searchProducts(query)
             .mapToProductWithSupplier()
         return Single.concatArrayEager(local, remote)
+            .map { it.sortedBy { product -> product.id } }
     }
 
     override fun getAllProducts(): Flowable<List<Product>> {
-        val local = localDataSourceProduct.getAllProducts().map { products -> products.map { it.toDomain() } }
+        val local = localDataSourceProduct.getAllProducts()
+            .subscribeOn(Schedulers.io())
+            .map { products -> products.map { it.toDomain() } }
         val remote = remoteDataSourceProduct.fetchAllProducts()
             .mapToProductWithSupplier()
-            .doOnSuccess { productWithSuppliers ->
-                updateDb(productWithSuppliers).subscribe()
-            }
+            .doOnSuccess { productWithSuppliers -> updateDb(productWithSuppliers).subscribe() }
         return Single.concatArrayEager(local, remote)
+            .map { it.sortedBy { product -> product.id } }
     }
 
     override fun getProductById(id: Int): Flowable<Product> {
-        val local = localDataSourceProduct.getProductById(id).map { it.toDomain() }
+        val local = localDataSourceProduct.getProductById(id)
+            .subscribeOn(Schedulers.io())
+            .map { it.toDomain() }
         val remote = remoteDataSourceProduct.fetchProductById(id)
             .mapToProductWithSupplier()
             .doOnSuccess { productWithSuppliers ->
@@ -102,12 +113,15 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override fun getLowStockProducts(): Flowable<List<Product>> {
-        val local = localDataSourceProduct.getLowStockProducts().map { products -> products.map { it.toDomain() } }
+        val local = localDataSourceProduct.getLowStockProducts()
+            .subscribeOn(Schedulers.io())
+            .map { products -> products.map { it.toDomain() } }
         val remote = remoteDataSourceProduct.fetchLowStockProducts()
             .mapToProductWithSupplier()
             .doOnSuccess { productWithSuppliers ->
                 updateDb(productWithSuppliers).subscribe()
             }
         return Single.concatArrayEager(local, remote)
+            .map { it.sortedBy { product -> product.currentStock } }
     }
 }
