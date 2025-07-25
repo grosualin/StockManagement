@@ -19,7 +19,7 @@ interface SupplierDao {
     fun insertSupplier(supplier: SupplierEntity): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(transactions: List<SupplierEntity>): Completable
+    fun insertAll(suppliers: List<SupplierEntity>): Completable
 
     @Update
     fun updateSupplier(supplier: SupplierEntity): Completable

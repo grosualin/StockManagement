@@ -1,6 +1,7 @@
 package ro.alingrosu.stockmanagement.presentation.model
 
 import ro.alingrosu.stockmanagement.domain.model.TransactionType
+import java.io.Serializable
 
 data class TransactionUi(
     val id: Int = 0,
@@ -9,4 +10,4 @@ data class TransactionUi(
     val product: ProductUi,
     val quantity: Int,
     val notes: String
-)
+) : Serializable

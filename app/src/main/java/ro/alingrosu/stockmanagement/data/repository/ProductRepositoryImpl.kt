@@ -5,62 +5,109 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import ro.alingrosu.stockmanagement.data.local.dao.ProductDao
+import ro.alingrosu.stockmanagement.data.local.dao.SupplierDao
 import ro.alingrosu.stockmanagement.data.mapper.toDomain
 import ro.alingrosu.stockmanagement.data.mapper.toDto
 import ro.alingrosu.stockmanagement.data.mapper.toEntity
 import ro.alingrosu.stockmanagement.data.service.ProductService
+import ro.alingrosu.stockmanagement.data.service.SupplierService
+import ro.alingrosu.stockmanagement.data.service.dto.ProductDto
 import ro.alingrosu.stockmanagement.domain.model.Product
 import ro.alingrosu.stockmanagement.domain.repository.ProductRepository
 import javax.inject.Inject
 
 class ProductRepositoryImpl @Inject constructor(
-    private val localDataSource: ProductDao,
-    private val remoteDataSource: ProductService
+    private val localDataSourceProduct: ProductDao,
+    private val localDataSourceSupplier: SupplierDao,
+    private val remoteDataSourceProduct: ProductService,
+    private val remoteDataSourceSupplier: SupplierService,
 ) : ProductRepository {
 
+    /**
+     * This extension function is used to map the list of products to a list of product with supplier.
+     * Since the local implementation of service does not provide complete information about the product,
+     * including supplier information, we need to fetch the supplier information from the remote service in a separate api call.
+     * Ideally, the list of proructs coming from backend would include information about the supplier as well,
+     * not just supplier id.
+     */
+    private fun Single<List<ProductDto>>.mapToProductWithSupplier(): Single<List<Product>> {
+        return this
+            .flattenAsObservable { it }
+            .flatMapSingle { product ->
+                remoteDataSourceSupplier.fetchSupplierById(product.supplierId)
+                    .switchIfEmpty(Single.error(IllegalStateException("Supplier not found")))
+                    .map { supplier ->
+                        product.toDomain(supplier)
+                    }
+            }
+            .toList()
+    }
+
+    private fun Maybe<ProductDto>.mapToProductWithSupplier(): Maybe<Product> {
+        return this
+            .flatMapSingle { product ->
+                remoteDataSourceSupplier.fetchSupplierById(product.supplierId)
+                    .switchIfEmpty(Single.error(IllegalStateException("Supplier not found")))
+                    .map { supplier ->
+                        product.toDomain(supplier)
+                    }
+            }
+    }
+
+    private fun updateDb(products: List<Product>): Completable {
+        return localDataSourceSupplier.insertAll(products.map { it.supplier.toEntity() })
+            .andThen(localDataSourceProduct.insertAll(products.map { it.toEntity() }))
+    }
+
     override fun addProduct(product: Product): Completable {
-        return remoteDataSource.postProduct(product.toDto())
-            .andThen(localDataSource.insertProduct(product.toEntity()).onErrorComplete())
+        return remoteDataSourceProduct.postProduct(product.toDto())
+            .andThen(localDataSourceProduct.insertProduct(product.toEntity()).onErrorComplete())
     }
 
     override fun updateProduct(product: Product): Completable {
-        return remoteDataSource.updateProduct(product.toDto())
-            .andThen(localDataSource.updateProduct(product.toEntity()).onErrorComplete())
+        return remoteDataSourceProduct.updateProduct(product.toDto())
+            .andThen(localDataSourceProduct.updateProduct(product.toEntity()).onErrorComplete())
     }
 
     override fun deleteProductByProductId(productId: Int): Completable {
-        return remoteDataSource.deleteProductById(productId)
-            .andThen(localDataSource.deleteProductById(productId).onErrorComplete())
+        return remoteDataSourceProduct.deleteProductById(productId)
+            .andThen(localDataSourceProduct.deleteProductById(productId).onErrorComplete())
     }
 
     override fun searchProducts(query: String): Flowable<List<Product>> {
-        val local = localDataSource.searchProducts(query).map { products -> products.map { it.toDomain() } }
-        val remote = remoteDataSource.searchProducts(query)
-            .map { product -> product.map { it.toDomain() } }
+        val local = localDataSourceProduct.searchProducts(query).map { products -> products.map { it.toDomain() } }
+        val remote = remoteDataSourceProduct.searchProducts(query)
+            .mapToProductWithSupplier()
         return Single.concatArrayEager(local, remote)
     }
 
     override fun getAllProducts(): Flowable<List<Product>> {
-        val local = localDataSource.getAllProducts().map { products -> products.map { it.toDomain() } }
-        val remote = remoteDataSource.fetchAllProducts()
-            .doOnSuccess { products -> localDataSource.insertAll(products.map { it.toEntity() }).subscribe() }
-            .map { product -> product.map { it.toDomain() } }
+        val local = localDataSourceProduct.getAllProducts().map { products -> products.map { it.toDomain() } }
+        val remote = remoteDataSourceProduct.fetchAllProducts()
+            .mapToProductWithSupplier()
+            .doOnSuccess { productWithSuppliers ->
+                updateDb(productWithSuppliers).subscribe()
+            }
         return Single.concatArrayEager(local, remote)
     }
 
     override fun getProductById(id: Int): Flowable<Product> {
-        val local = localDataSource.getProductById(id).map { it.toDomain() }
-        val remote = remoteDataSource.fetchProductById(id)
-            .doOnSuccess { product -> localDataSource.updateProduct(product.toEntity()).subscribe() }
-            .map { product -> product.toDomain() }
+        val local = localDataSourceProduct.getProductById(id).map { it.toDomain() }
+        val remote = remoteDataSourceProduct.fetchProductById(id)
+            .mapToProductWithSupplier()
+            .doOnSuccess { productWithSuppliers ->
+                updateDb(listOf(productWithSuppliers)).subscribe()
+            }
         return Maybe.concatArrayEager(local, remote)
     }
 
     override fun getLowStockProducts(): Flowable<List<Product>> {
-        val local = localDataSource.getLowStockProducts().map { products -> products.map { it.toDomain() } }
-        val remote = remoteDataSource.fetchLowStockProducts()
-            .doOnSuccess { products -> localDataSource.insertAll(products.map { it.toEntity() }).subscribe() }
-            .map { product -> product.map { it.toDomain() } }
+        val local = localDataSourceProduct.getLowStockProducts().map { products -> products.map { it.toDomain() } }
+        val remote = remoteDataSourceProduct.fetchLowStockProducts()
+            .mapToProductWithSupplier()
+            .doOnSuccess { productWithSuppliers ->
+                updateDb(productWithSuppliers).subscribe()
+            }
         return Single.concatArrayEager(local, remote)
     }
 }

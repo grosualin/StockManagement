@@ -28,8 +28,13 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideProductRepository(dao: ProductDao, api: ProductService): ProductRepository =
-        ProductRepositoryImpl(dao, api)
+    fun provideProductRepository(
+        dao: ProductDao,
+        daoSupplier: SupplierDao,
+        api: ProductService,
+        apiSupplier: SupplierService
+    ): ProductRepository =
+        ProductRepositoryImpl(dao, daoSupplier, api, apiSupplier)
 
     @Provides
     @Singleton
@@ -41,8 +46,10 @@ class RepositoryModule {
     fun provideTransactionRepository(
         dao: TransactionDao,
         daoProduct: ProductDao,
+        daoSupplier: SupplierDao,
         api: TransactionService,
-        apiProduct: ProductService
+        apiProduct: ProductService,
+        apiSupplier: SupplierService
     ): TransactionRepository =
-        TransactionRepositoryImpl(dao, daoProduct, api, apiProduct)
+        TransactionRepositoryImpl(dao, daoProduct, daoSupplier, api, apiProduct, apiSupplier)
 }

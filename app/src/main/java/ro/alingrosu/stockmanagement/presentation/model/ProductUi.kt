@@ -9,7 +9,7 @@ data class ProductUi(
     val price: Double,
     val category: String,
     val barcode: String,
-    val supplierId: Int,
+    val supplier: SupplierUi,
     val currentStock: Int,
     val minStock: Int
-): Serializable
+) : Serializable

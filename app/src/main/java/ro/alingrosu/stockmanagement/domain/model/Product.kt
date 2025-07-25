@@ -7,7 +7,7 @@ data class Product(
     val price: Double,
     val category: String,
     val barcode: String,
-    val supplierId: Int,
+    val supplier: Supplier,
     val currentStock: Int,
     val minStock: Int
 )

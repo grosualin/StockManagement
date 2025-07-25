@@ -2,9 +2,11 @@ package ro.alingrosu.stockmanagement.presentation.ui.main.dashboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.ItemLowStockProductBinding
 import ro.alingrosu.stockmanagement.databinding.ItemRecentTransactionBinding
 import ro.alingrosu.stockmanagement.presentation.model.DashboardListItem
@@ -14,8 +16,7 @@ class DashboardAdapter(
 ) : ListAdapter<DashboardListItem, RecyclerView.ViewHolder>(DashboardDiffCallback()) {
 
     enum class ViewType(val id: Int) {
-        PRODUCT(0),
-        TRANSACTION(1)
+        PRODUCT(0), TRANSACTION(1)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -53,6 +54,8 @@ class DashboardAdapter(
                 tvProductName.text = item.product.name
                 tvProductDescription.text = item.product.description
                 tvStockCount.text = item.product.currentStock.toString()
+                val color = if (item.product.currentStock < item.product.minStock) R.color.red else R.color.black
+                tvStockCount.setTextColor(ContextCompat.getColor(binding.root.context, color))
                 tvMinStockCount.text = item.product.minStock.toString()
             }
         }

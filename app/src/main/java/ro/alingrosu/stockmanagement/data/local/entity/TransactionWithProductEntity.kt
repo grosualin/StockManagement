@@ -8,7 +8,8 @@ data class TransactionWithProductEntity(
 
     @Relation(
         parentColumn = "productId",
-        entityColumn = "id"
+        entityColumn = "id",
+        entity = ProductEntity::class
     )
-    val product: ProductEntity
+    val product: ProductWithSupplierEntity
 )

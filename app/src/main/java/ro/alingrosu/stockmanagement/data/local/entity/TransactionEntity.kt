@@ -2,6 +2,7 @@ package ro.alingrosu.stockmanagement.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -13,7 +14,8 @@ import androidx.room.PrimaryKey
             childColumns = ["productId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index("productId")]
 )
 data class TransactionEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,

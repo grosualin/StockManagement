@@ -5,11 +5,13 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import ro.alingrosu.stockmanagement.data.local.entity.ProductEntity
+import ro.alingrosu.stockmanagement.data.local.entity.ProductWithSupplierEntity
 
 @Dao
 interface ProductDao {
@@ -18,7 +20,7 @@ interface ProductDao {
     fun insertProduct(product: ProductEntity): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(transactions: List<ProductEntity>): Completable
+    fun insertAll(products: List<ProductEntity>): Completable
 
     @Update
     fun updateProduct(product: ProductEntity): Completable
@@ -29,15 +31,19 @@ interface ProductDao {
     @Query("DELETE FROM product WHERE id = :productId")
     fun deleteProductById(productId: Int): Completable
 
+    @Transaction
     @Query("SELECT * FROM product WHERE name LIKE '%' || :query || '%'")
-    fun searchProducts(query: String): Single<List<ProductEntity>>
+    fun searchProducts(query: String): Single<List<ProductWithSupplierEntity>>
 
+    @Transaction
     @Query("SELECT * FROM product")
-    fun getAllProducts(): Single<List<ProductEntity>>
+    fun getAllProducts(): Single<List<ProductWithSupplierEntity>>
 
+    @Transaction
     @Query("SELECT * FROM product WHERE id = :id")
-    fun getProductById(id: Int): Maybe<ProductEntity>
+    fun getProductById(id: Int): Maybe<ProductWithSupplierEntity>
 
+    @Transaction
     @Query("SELECT * FROM product WHERE currentStock < minStock")
-    fun getLowStockProducts(): Single<List<ProductEntity>>
+    fun getLowStockProducts(): Single<List<ProductWithSupplierEntity>>
 }
