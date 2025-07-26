@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.jakewharton.rxbinding4.widget.itemClickEvents
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentProductDetailBinding
 import ro.alingrosu.stockmanagement.presentation.model.ProductUi
@@ -25,7 +24,6 @@ class ProductDetailFragment : BaseFragment(R.layout.fragment_product_detail) {
 
     private lateinit var binding: FragmentProductDetailBinding
     private val args: ProductDetailFragmentArgs by navArgs()
-    private val compositeDisposable = CompositeDisposable()
 
     private val viewModel: ProductDetailViewModel by viewModels {
         Factory {

@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit
 class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
 
     private lateinit var binding: FragmentProductListBinding
-    private val compositeDisposable = CompositeDisposable()
 
     private val viewModel: ProductListViewModel by viewModels {
         Factory {
@@ -41,11 +40,6 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
             binding = inflated
             return binding.root
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        compositeDisposable.clear()
     }
 
     override fun initView() {
