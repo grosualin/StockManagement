@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentLoginBinding
@@ -37,7 +36,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     }
 
     override fun initView() {
-        binding.buttonLogin.setOnClickListener {
+        binding.buttonLogin.setClickListener {
             val (user, pass) = binding.emailPhoneInput.text.toString() to binding.passInput.text.toString()
             viewModel.login(user, pass)
         }
@@ -47,13 +46,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 is UiState.Loading -> {
-                    binding.loading.isVisible = true
-                    binding.buttonLogin.isEnabled = false
+                    binding.buttonLogin.setLoading(true)
                 }
 
                 is UiState.Success -> {
-                    binding.loading.isVisible = false
-                    binding.buttonLogin.isEnabled = true
+                    binding.buttonLogin.setLoading(false)
                     Toast.makeText(context, "Login success: ${uiState.data}", Toast.LENGTH_LONG).show()
 
                     if (uiState.data == true) {
@@ -64,6 +61,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 }
 
                 is UiState.Error -> {
+                    binding.buttonLogin.setLoading(false)
                     Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
                 }
             }
