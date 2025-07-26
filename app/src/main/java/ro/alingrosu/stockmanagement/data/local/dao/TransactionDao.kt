@@ -21,6 +21,20 @@ interface TransactionDao {
     fun insertAll(transactions: List<TransactionEntity>): Completable
 
     @Transaction
+    @Query(
+        """
+    SELECT transactions.*
+    FROM transactions
+    JOIN product ON transactions.productId = product.id
+    WHERE transactions.type LIKE '%' || :query || '%'
+       OR transactions.notes LIKE '%' || :query || '%'
+       OR product.name LIKE '%' || :query || '%'
+       OR product.description LIKE '%' || :query || '%'
+"""
+    )
+    fun searchTransactions(query: String): Single<List<TransactionWithProductEntity>>
+
+    @Transaction
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getAllTransactions(): Single<List<TransactionWithProductEntity>>
 

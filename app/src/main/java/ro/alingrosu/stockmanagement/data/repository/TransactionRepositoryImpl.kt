@@ -31,24 +31,6 @@ class TransactionRepositoryImpl @Inject constructor(
 ) : TransactionRepository {
 
     /**
-     * This extension function is used to map the list of products to a list of product with supplier.
-     * Since the local implementation of service does not provide complete information about the product,
-     * including supplier information, we need to fetch the supplier information from the remote service in a separate api call.
-     * Ideally, the list of proructs coming from backend would include information about the supplier as well,
-     * not just supplier id.
-     */
-    private fun Maybe<ProductDto>.mapToProductWithSupplier(): Maybe<Product> {
-        return this
-            .flatMapSingle { product ->
-                remoteDataSourceSupplier.fetchSupplierById(product.supplierId)
-                    .switchIfEmpty(Single.error(IllegalStateException("Supplier not found")))
-                    .map { supplier ->
-                        product.toDomain(supplier)
-                    }
-            }
-    }
-
-    /**
      * This extension function is used to map the list of transactions to a list of transaction with product.
      * Since the local implementation of service does not provide complete information about the transaction,
      * including product information, we need to fetch the product information from the remote service in a separate api call.
@@ -81,6 +63,13 @@ class TransactionRepositoryImpl @Inject constructor(
         return remoteDataSourceTransaction.postTransaction(transaction.toDto())
             .andThen(localDataSourceTransaction.insertTransaction(transaction.toEntity()))
             .subscribeOn(Schedulers.io())
+    }
+
+    override fun searchTransactions(query: String): Flowable<List<Transaction>> {
+        return localDataSourceTransaction.searchTransactions(query)
+            .subscribeOn(Schedulers.io())
+            .map { transactions -> transactions.map { it.toDomain() }.sortedBy { it.id } }
+            .toFlowable()
     }
 
     override fun getAllTransactions(): Flowable<List<Transaction>> {
