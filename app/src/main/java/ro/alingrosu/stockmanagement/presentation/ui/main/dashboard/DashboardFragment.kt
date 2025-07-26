@@ -8,8 +8,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentDashboardBinding
 import ro.alingrosu.stockmanagement.presentation.model.DashboardListItem
@@ -40,11 +38,8 @@ class DashboardFragment : BaseFragment(R.layout.fragment_dashboard) {
     }
 
     override fun initView() {
-        val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
         binding.rvLowStockItems.adapter = productAdapter
-        binding.rvLowStockItems.addItemDecoration(dividerItemDecoration)
         binding.rvRecentTransactions.adapter = transactionAdapter
-        binding.rvRecentTransactions.addItemDecoration(dividerItemDecoration)
     }
 
     override fun listenFoUiState() {

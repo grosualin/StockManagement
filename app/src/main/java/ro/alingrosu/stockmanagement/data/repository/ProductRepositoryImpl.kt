@@ -80,13 +80,10 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override fun searchProducts(query: String): Flowable<List<Product>> {
-        val local = localDataSourceProduct.searchProducts(query)
+        return localDataSourceProduct.searchProducts(query)
             .subscribeOn(Schedulers.io())
-            .map { products -> products.map { it.toDomain() } }
-        val remote = remoteDataSourceProduct.searchProducts(query)
-            .mapToProductWithSupplier()
-        return Single.concatArrayEager(local, remote)
-            .map { it.sortedBy { product -> product.id } }
+            .map { products -> products.map { it.toDomain() }.sortedBy { it.id } }
+            .toFlowable()
     }
 
     override fun getAllProducts(): Flowable<List<Product>> {

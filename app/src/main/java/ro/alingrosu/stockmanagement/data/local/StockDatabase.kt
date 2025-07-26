@@ -9,7 +9,7 @@ import ro.alingrosu.stockmanagement.data.local.entity.ProductEntity
 import ro.alingrosu.stockmanagement.data.local.entity.SupplierEntity
 import ro.alingrosu.stockmanagement.data.local.entity.TransactionEntity
 
-@Database(entities = [ProductEntity::class, SupplierEntity::class, TransactionEntity::class], version = 1)
+@Database(entities = [ProductEntity::class, SupplierEntity::class, TransactionEntity::class], version = 2)
 abstract class StockDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
     abstract fun supplierDao(): SupplierDao

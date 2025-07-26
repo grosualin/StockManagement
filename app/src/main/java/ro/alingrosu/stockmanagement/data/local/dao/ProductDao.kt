@@ -32,7 +32,14 @@ interface ProductDao {
     fun deleteProductById(productId: Int): Completable
 
     @Transaction
-    @Query("SELECT * FROM product WHERE name LIKE '%' || :query || '%'")
+    @Query("""
+    SELECT product.*
+    FROM product
+    JOIN supplier ON product.supplierId = supplier.id
+    WHERE product.name LIKE '%' || :query || '%'
+       OR product.description LIKE '%' || :query || '%'
+       OR supplier.name LIKE '%' || :query || '%'
+""")
     fun searchProducts(query: String): Single<List<ProductWithSupplierEntity>>
 
     @Transaction

@@ -7,10 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ro.alingrosu.stockmanagement.R
-import ro.alingrosu.stockmanagement.databinding.ItemLowStockProductBinding
 import ro.alingrosu.stockmanagement.databinding.ItemProductBinding
-import ro.alingrosu.stockmanagement.databinding.ItemRecentTransactionBinding
-import ro.alingrosu.stockmanagement.presentation.model.DashboardListItem
 import ro.alingrosu.stockmanagement.presentation.model.ProductUi
 
 class ProductAdapter(
@@ -32,22 +29,13 @@ class ProductAdapter(
                 root.setOnClickListener { onItemClicked.invoke(item) }
                 tvProductName.text = item.name
                 tvProductDescription.text = item.description
+                tvCategoryValue.text = item.category
+                tvSupplierValue.text = item.supplier.name
+                tvPriceValue.text = "$${item.price}"
                 tvStockCount.text = item.currentStock.toString()
                 val color = if (item.currentStock < item.minStock) R.color.red else R.color.black
                 tvStockCount.setTextColor(ContextCompat.getColor(binding.root.context, color))
                 tvMinStockCount.text = item.minStock.toString()
-            }
-        }
-    }
-
-    class TransactionViewHolder(private val binding: ItemRecentTransactionBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: DashboardListItem.TransactionListItem, onItemClicked: (DashboardListItem) -> Unit) {
-            binding.apply {
-                root.setOnClickListener { onItemClicked.invoke(item) }
-                tvProductName.text = item.transaction.product.name
-                tvTransactionDescription.text = item.transaction.notes
-                tvQtyCount.text = item.transaction.quantity.toString()
-                tvTypeValue.text = item.transaction.type.value
             }
         }
     }
