@@ -46,7 +46,12 @@
         android:id="@+id/supplierDetailFragment"
         android:name="ro.alingrosu.stockmanagement.presentation.ui.main.supplier.detail.SupplierDetailFragment"
         android:label="fragment_supplier_detail"
-        tools:layout="@layout/fragment_supplier_detail" />
+        tools:layout="@layout/fragment_supplier_detail">
+        <argument
+            android:name="supplier"
+            app:argType="ro.alingrosu.stockmanagement.presentation.model.SupplierUi"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/transactionListFragment"
         android:name="ro.alingrosu.stockmanagement.presentation.ui.main.transaction.TransactionListFragment"

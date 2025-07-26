@@ -21,7 +21,14 @@ class SupplierRepositoryImpl @Inject constructor(
 
     override fun addSupplier(supplier: Supplier): Completable {
         return remoteDataSource.postSupplier(supplier.toDto())
-            .andThen(localDataSource.insertSupplier(supplier.toEntity()).onErrorComplete())
+            .andThen(
+                localDataSource.getMaxId()
+                    .map { maxId -> maxId + 1 }
+                    .flatMapCompletable { nextId ->
+                        val supplierWihId = supplier.toEntity().copy(id = nextId)
+                        localDataSource.insertSupplier(supplierWihId).onErrorComplete()
+                    }
+            )
             .subscribeOn(Schedulers.io())
     }
 

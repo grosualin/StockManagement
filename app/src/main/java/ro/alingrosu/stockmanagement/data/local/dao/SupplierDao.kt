@@ -21,6 +21,9 @@ interface SupplierDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(suppliers: List<SupplierEntity>): Completable
 
+    @Query("SELECT MAX(id) FROM supplier")
+    fun getMaxId(): Single<Int>
+
     @Update
     fun updateSupplier(supplier: SupplierEntity): Completable
 
