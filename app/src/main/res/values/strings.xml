@@ -22,4 +22,11 @@
     <string name="category">Category:</string>
     <string name="supplier">Supplier:</string>
     <string name="no_products_found">No products found</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="barcode">Barcode</string>
+    <string name="current_stock">Current stock</string>
+    <string name="minimum_stock">Minimum stock</string>
+    <string name="save">Save</string>
+    <string name="product_save_success">Product saved successfully!</string>
 </resources>
