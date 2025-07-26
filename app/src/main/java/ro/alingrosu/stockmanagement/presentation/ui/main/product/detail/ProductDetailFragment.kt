@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.jakewharton.rxbinding4.widget.itemClickEvents
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentProductDetailBinding
+import ro.alingrosu.stockmanagement.presentation.model.ProductUi
+import ro.alingrosu.stockmanagement.presentation.model.SupplierUi
 import ro.alingrosu.stockmanagement.presentation.state.UiState
 import ro.alingrosu.stockmanagement.presentation.ui.base.BaseFragment
 import ro.alingrosu.stockmanagement.presentation.util.Factory
@@ -20,12 +25,14 @@ class ProductDetailFragment : BaseFragment(R.layout.fragment_product_detail) {
 
     private lateinit var binding: FragmentProductDetailBinding
     private val args: ProductDetailFragmentArgs by navArgs()
+    private val compositeDisposable = CompositeDisposable()
 
     private val viewModel: ProductDetailViewModel by viewModels {
         Factory {
             getAppComponent().productDetailViewModel
         }
     }
+    private var selectedSupplier: SupplierUi? = null
 
 
     override fun onCreateView(
@@ -39,18 +46,52 @@ class ProductDetailFragment : BaseFragment(R.layout.fragment_product_detail) {
     }
 
     override fun initView() {
+        /**
+         * If we receive ProductUi object through arguments means we are in edit mode
+         * Otherwise, we consider to be in add mode
+         */
+        args.product?.let { product ->
+            setEditMode(product)
+        } ?: run {
+            setAddMode()
+        }
+    }
+
+    override fun listenFoUiState() {
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when (uiState) {
+                is UiState.Loading -> {
+                    binding.buttonSave.setLoading(true)
+                }
+
+                is UiState.Success -> {
+                    binding.buttonSave.setLoading(false)
+                    Toast.makeText(context, getString(R.string.product_save_success), Toast.LENGTH_LONG).show()
+                    findNavController().popBackStack()
+                }
+
+                is UiState.Error -> {
+                    binding.buttonSave.setLoading(false)
+                    Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun setEditMode(product: ProductUi) {
         binding.apply {
-            etName.setText(args.product.name)
-            etDescription.setText(args.product.description)
-            etPrice.setText(args.product.price.toString())
-            etCategory.setText(args.product.category)
-            etBarcode.setText(args.product.barcode)
-            etSupplier.setText(args.product.supplier.name)
-            etCurrentStock.setText(args.product.currentStock.toString())
-            etMinStock.setText(args.product.minStock.toString())
-            buttonSave.setOnClickListener {
-                viewModel.saveProduct(
-                    args.product.copy(
+            etName.setText(product.name)
+            etDescription.setText(product.description)
+            etPrice.setText(product.price.toString())
+            etCategory.setText(product.category)
+            etBarcode.setText(product.barcode)
+            acSupplier.setText(product.supplier.name)
+            acSupplier.isEnabled = false
+            etCurrentStock.setText(product.currentStock.toString())
+            etMinStock.setText(product.minStock.toString())
+            buttonSave.setClickListener {
+                viewModel.updateProduct(
+                    product.copy(
                         name = etName.text.toString(),
                         description = etDescription.text.toString(),
                         price = etPrice.text.toString().toDouble(),
@@ -62,25 +103,48 @@ class ProductDetailFragment : BaseFragment(R.layout.fragment_product_detail) {
         }
     }
 
-    override fun listenFoUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is UiState.Loading -> {
-                    binding.loading.isVisible = true
-                    binding.buttonSave.isEnabled = false
-                }
+    private fun setAddMode() {
+        viewModel.suppliers.observe(viewLifecycleOwner) {
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                it.map { it.name }
+            )
 
-                is UiState.Success -> {
-                    binding.loading.isVisible = false
-                    binding.buttonSave.isEnabled = true
-                    Toast.makeText(context, getString(R.string.product_save_success), Toast.LENGTH_LONG).show()
-                    findNavController().popBackStack()
-                }
+            binding.acSupplier.setAdapter(adapter)
+            binding.acSupplier.isEnabled = true
 
-                is UiState.Error -> {
-                    Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
-                }
-            }
+            compositeDisposable.add(
+                binding.acSupplier.itemClickEvents()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ event ->
+                        selectedSupplier = viewModel.suppliers.value?.get(event.position)
+                    }, { error ->
+                        error.printStackTrace()
+                    })
+            )
+        }
+        viewModel.fetchSuppliers()
+
+        binding.etCurrentStock.isEnabled = true
+        binding.etMinStock.isEnabled = true
+
+        binding.buttonSave.setClickListener {
+            viewModel.addProduct(
+                ProductUi(
+                    name = binding.etName.text.toString(),
+                    description = binding.etDescription.text.toString(),
+                    price = binding.etPrice.text.toString().toDoubleOrNull() ?: 0.0,
+                    category = binding.etCategory.text.toString(),
+                    barcode = binding.etBarcode.text.toString(),
+                    supplier = selectedSupplier ?: run {
+                        Toast.makeText(context, getString(R.string.supplier_not_selected), Toast.LENGTH_LONG).show()
+                        return@setClickListener
+                    },
+                    currentStock = binding.etCurrentStock.text.toString().toIntOrNull() ?: 0,
+                    minStock = binding.etMinStock.text.toString().toIntOrNull() ?: 0
+                )
+            )
         }
     }
 }

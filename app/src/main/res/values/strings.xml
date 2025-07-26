@@ -29,4 +29,6 @@
     <string name="minimum_stock">Minimum stock</string>
     <string name="save">Save</string>
     <string name="product_save_success">Product saved successfully!</string>
+    <string name="add_product">Add product</string>
+    <string name="supplier_not_selected">Please select the product supplier!</string>
 </resources>

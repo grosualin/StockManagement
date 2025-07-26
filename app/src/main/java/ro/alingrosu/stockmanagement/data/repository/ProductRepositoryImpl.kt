@@ -63,7 +63,14 @@ class ProductRepositoryImpl @Inject constructor(
 
     override fun addProduct(product: Product): Completable {
         return remoteDataSourceProduct.postProduct(product.toDto())
-            .andThen(localDataSourceProduct.insertProduct(product.toEntity()).onErrorComplete())
+            .andThen(
+                localDataSourceProduct.getMaxId()
+                    .map { maxId -> maxId + 1 }
+                    .flatMapCompletable { nextId ->
+                        val productWithId = product.toEntity().copy(id = nextId)
+                        localDataSourceProduct.insertProduct(productWithId).onErrorComplete()
+                    }
+            )
             .subscribeOn(Schedulers.io())
     }
 
@@ -90,11 +97,12 @@ class ProductRepositoryImpl @Inject constructor(
         val local = localDataSourceProduct.getAllProducts()
             .subscribeOn(Schedulers.io())
             .map { products -> products.map { it.toDomain() } }
+            .map { it.sortedBy { product -> product.id } }
         val remote = remoteDataSourceProduct.fetchAllProducts()
             .mapToProductWithSupplier()
+            .map { it.sortedBy { product -> product.id } }
             .doOnSuccess { productWithSuppliers -> updateDb(productWithSuppliers).subscribe() }
         return Single.concatArrayEager(local, remote)
-            .map { it.sortedBy { product -> product.id } }
     }
 
     override fun getProductById(id: Int): Flowable<Product> {

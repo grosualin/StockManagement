@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.jakewharton.rxbinding4.appcompat.queryTextChanges
+import com.jakewharton.rxbinding4.view.clicks
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentProductListBinding
@@ -52,17 +52,23 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
         binding.rvProducts.adapter = productAdapter
 
         compositeDisposable.add(
-            Observable.create<String> { emitter ->
-                binding.svProducts.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean = false
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        emitter.onNext(newText.orEmpty())
-                        return true
-                    }
-                })
-            }.debounce(500, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
+            binding.fabAddProduct.clicks()
+                .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    findNavController().navigate(
+                        ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment(null)
+                    )
+                }, {
+                    it.printStackTrace()
+                })
+        )
+        compositeDisposable.add(
+            binding.svProducts.queryTextChanges()
+                .skipInitialValue()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { it.toString() }
                 .subscribe({
                     viewModel.fetchProducts(it)
                 }, {

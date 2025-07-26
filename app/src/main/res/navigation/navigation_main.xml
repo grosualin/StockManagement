@@ -30,7 +30,8 @@
         tools:layout="@layout/fragment_product_detail">
         <argument
             android:name="product"
-            app:argType="ro.alingrosu.stockmanagement.presentation.model.ProductUi" />
+            app:argType="ro.alingrosu.stockmanagement.presentation.model.ProductUi"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/supplierListFragment"
