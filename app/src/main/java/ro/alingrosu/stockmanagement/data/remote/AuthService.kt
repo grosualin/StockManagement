@@ -1,4 +1,4 @@
-package ro.alingrosu.stockmanagement.data.service
+package ro.alingrosu.stockmanagement.data.remote
 
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers

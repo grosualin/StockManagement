@@ -1,10 +1,10 @@
-package ro.alingrosu.stockmanagement.data.service
+package ro.alingrosu.stockmanagement.data.remote
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ro.alingrosu.stockmanagement.data.service.dto.SupplierDto
+import ro.alingrosu.stockmanagement.data.remote.dto.SupplierDto
 
 interface SupplierService {
     fun postSupplier(supplier: SupplierDto): Completable

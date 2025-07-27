@@ -1,9 +1,9 @@
-package ro.alingrosu.stockmanagement.data.service
+package ro.alingrosu.stockmanagement.data.remote
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ro.alingrosu.stockmanagement.data.service.dto.TransactionDto
+import ro.alingrosu.stockmanagement.data.remote.dto.TransactionDto
 import java.util.Date
 import java.util.concurrent.TimeUnit
 

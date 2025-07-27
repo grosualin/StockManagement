@@ -1,4 +1,4 @@
-package ro.alingrosu.stockmanagement.data.service.dto
+package ro.alingrosu.stockmanagement.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
