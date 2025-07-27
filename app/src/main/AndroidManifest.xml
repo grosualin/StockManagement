@@ -29,6 +29,10 @@
             android:name=".presentation.ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.StockManagement" />
+        <activity
+            android:name=".presentation.ui.main.scanner.PortraitScannerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.StockManagement" />
     </application>
 
 </manifest>

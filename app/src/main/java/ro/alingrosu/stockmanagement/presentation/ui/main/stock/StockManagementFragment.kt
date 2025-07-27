@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.distinctUntilChanged
 import com.jakewharton.rxbinding4.widget.itemClickEvents
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentStockManagementBinding
@@ -17,6 +19,7 @@ import ro.alingrosu.stockmanagement.presentation.model.ProductUi
 import ro.alingrosu.stockmanagement.presentation.model.TransactionUi
 import ro.alingrosu.stockmanagement.presentation.state.UiState
 import ro.alingrosu.stockmanagement.presentation.ui.base.BaseFragment
+import ro.alingrosu.stockmanagement.presentation.ui.main.scanner.PortraitScannerActivity
 import ro.alingrosu.stockmanagement.presentation.util.Factory
 import ro.alingrosu.stockmanagement.presentation.util.getAppComponent
 import java.util.Date
@@ -32,6 +35,15 @@ class StockManagementFragment : BaseFragment(R.layout.fragment_stock_management)
     }
     private var selectedProduct: ProductUi? = null
     private var selectedType: TransactionType? = null
+
+    private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
+        if (result.contents != null) {
+            viewModel.scanBarcode(result.contents) { product ->
+                selectedProduct = product
+                product?.let { binding.acProduct.setText(it.name, false) }
+            }
+        }
+    }
 
 
     override fun onCreateView(
@@ -80,6 +92,18 @@ class StockManagementFragment : BaseFragment(R.layout.fragment_stock_management)
         )
 
         viewModel.fetchProducts()
+
+        binding.buttonScan.setOnClickListener {
+            val options = ScanOptions().apply {
+                setPrompt(getString(R.string.scan_barcode))
+                setBeepEnabled(true)
+                setOrientationLocked(true)
+                setCameraId(0)
+                setBarcodeImageEnabled(true)
+                setCaptureActivity(PortraitScannerActivity::class.java)
+            }
+            barcodeLauncher.launch(options)
+        }
 
         binding.buttonSave.setClickListener {
             viewModel.addStockTransaction(

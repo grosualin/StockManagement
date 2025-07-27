@@ -21,6 +21,7 @@ glide = "4.16.0"
 room = "2.7.2"
 dagger = "2.57"
 legacySupportV4Version = "1.0.0"
+zxing = "4.3.0"
 
 [libraries]
 androidXAppCompat = { module = "androidx.appcompat:appcompat", version.ref = "androidXAppCompat" }
@@ -54,6 +55,7 @@ room_compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4Version" }
+zxing = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -86,7 +88,8 @@ app = [
     "room_runtime",
     "room_ktx",
     "room_rxjava3",
-    "dagger"
+    "dagger",
+    "zxing"
 ]
 kapt = [
     "room_compiler",

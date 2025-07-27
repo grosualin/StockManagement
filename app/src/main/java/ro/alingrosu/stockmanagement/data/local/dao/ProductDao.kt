@@ -47,6 +47,9 @@ interface ProductDao {
     )
     fun searchProducts(query: String): Single<List<ProductWithSupplierEntity>>
 
+    @Query("SELECT * FROM product WHERE barcode = :barcode")
+    fun searchProductBarcode(barcode: String): Maybe<ProductWithSupplierEntity>
+
     @Transaction
     @Query("SELECT * FROM product")
     fun getAllProducts(): Single<List<ProductWithSupplierEntity>>

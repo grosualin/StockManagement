@@ -59,4 +59,18 @@ class StockManagementViewModel @Inject constructor(
         )
     }
 
+    fun scanBarcode(barcode: String, result: (ProductUi?) -> Unit) {
+        compositeDisposable.add(
+            stockManagementUseCase.searchProductBarcode(barcode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    result(it.toUiModel())
+                }, {
+                    result(null)
+                })
+        )
+
+    }
+
 }

@@ -2,6 +2,7 @@ package ro.alingrosu.stockmanagement.domain.usecase
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
 import ro.alingrosu.stockmanagement.domain.model.Product
 import ro.alingrosu.stockmanagement.domain.model.Transaction
 import ro.alingrosu.stockmanagement.domain.model.TransactionType
@@ -16,6 +17,7 @@ interface StockManagementUseCase {
     fun checkStockLevel(productId: Int): Flowable<Boolean>
     fun getLowStockProducts(): Flowable<List<Product>>
     fun getAllProducts(): Flowable<List<Product>>
+    fun searchProductBarcode(barcode: String): Maybe<Product>
 }
 
 class StockManagementUseCaseImpl @Inject constructor(
@@ -24,7 +26,7 @@ class StockManagementUseCaseImpl @Inject constructor(
 ) : StockManagementUseCase {
 
     override fun recordStockTransaction(transaction: Transaction): Completable {
-        return when(transaction.type) {
+        return when (transaction.type) {
             TransactionType.RESTOCK -> increaseStock(transaction.product.id, transaction.quantity)
             TransactionType.SALE -> decreaseStock(transaction.product.id, transaction.quantity)
         }
@@ -61,5 +63,9 @@ class StockManagementUseCaseImpl @Inject constructor(
 
     override fun getAllProducts(): Flowable<List<Product>> {
         return productRepository.getAllProducts()
+    }
+
+    override fun searchProductBarcode(barcode: String): Maybe<Product> {
+        return productRepository.searchProductBarcode(barcode)
     }
 }

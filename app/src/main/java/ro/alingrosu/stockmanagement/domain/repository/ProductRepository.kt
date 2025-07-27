@@ -2,6 +2,7 @@ package ro.alingrosu.stockmanagement.domain.repository
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
 import ro.alingrosu.stockmanagement.domain.model.Product
 
 interface ProductRepository {
@@ -9,6 +10,7 @@ interface ProductRepository {
     fun updateProduct(product: Product): Completable
     fun deleteProductByProductId(productId: Int): Completable
     fun searchProducts(query: String): Flowable<List<Product>>
+    fun searchProductBarcode(barcode: String): Maybe<Product>
     fun getAllProducts(): Flowable<List<Product>>
     fun getProductById(id: Int): Flowable<Product>
     fun getLowStockProducts(): Flowable<List<Product>>

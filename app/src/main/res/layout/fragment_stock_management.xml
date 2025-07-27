@@ -16,10 +16,12 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvProduct"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_medium"
-            app:errorEnabled="true"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:layout_constraintEnd_toStartOf="@id/buttonScan"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <AutoCompleteTextView
@@ -33,13 +35,23 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ImageButton
+            android:id="@+id/buttonScan"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_barcode_scanner"
+            app:layout_constraintBottom_toBottomOf="@id/tvProduct"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvProduct" />
+
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tvOperation"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            app:errorEnabled="true"
+            android:layout_marginTop="@dimen/margin_extra_large"
             app:layout_constraintTop_toBottomOf="@id/tvProduct">
 
             <AutoCompleteTextView
@@ -57,8 +69,7 @@
             android:id="@+id/tvQuantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            app:errorEnabled="true"
+            android:layout_marginTop="@dimen/margin_extra_large"
             app:layout_constraintTop_toBottomOf="@id/tvOperation">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -76,8 +87,7 @@
             android:id="@+id/tvNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            app:errorEnabled="true"
+            android:layout_marginTop="@dimen/margin_extra_large"
             app:layout_constraintTop_toBottomOf="@id/tvQuantity">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -95,8 +105,7 @@
             android:id="@+id/buttonSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_extra_large"
             android:text="@string/save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

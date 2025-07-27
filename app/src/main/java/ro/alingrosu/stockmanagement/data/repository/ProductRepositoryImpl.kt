@@ -93,6 +93,12 @@ class ProductRepositoryImpl @Inject constructor(
             .toFlowable()
     }
 
+    override fun searchProductBarcode(barcode: String): Maybe<Product> {
+        return localDataSourceProduct.searchProductBarcode(barcode)
+            .subscribeOn(Schedulers.io())
+            .map { it.toDomain() }
+    }
+
     override fun getAllProducts(): Flowable<List<Product>> {
         val local = localDataSourceProduct.getAllProducts()
             .subscribeOn(Schedulers.io())
