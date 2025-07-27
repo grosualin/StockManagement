@@ -9,10 +9,10 @@ import ro.alingrosu.stockmanagement.data.repository.AuthRepositoryImpl
 import ro.alingrosu.stockmanagement.data.repository.ProductRepositoryImpl
 import ro.alingrosu.stockmanagement.data.repository.SupplierRepositoryImpl
 import ro.alingrosu.stockmanagement.data.repository.TransactionRepositoryImpl
-import ro.alingrosu.stockmanagement.data.service.AuthService
-import ro.alingrosu.stockmanagement.data.service.ProductService
-import ro.alingrosu.stockmanagement.data.service.SupplierService
-import ro.alingrosu.stockmanagement.data.service.TransactionService
+import ro.alingrosu.stockmanagement.data.remote.AuthService
+import ro.alingrosu.stockmanagement.data.remote.ProductService
+import ro.alingrosu.stockmanagement.data.remote.SupplierService
+import ro.alingrosu.stockmanagement.data.remote.TransactionService
 import ro.alingrosu.stockmanagement.domain.repository.AuthRepository
 import ro.alingrosu.stockmanagement.domain.repository.ProductRepository
 import ro.alingrosu.stockmanagement.domain.repository.SupplierRepository

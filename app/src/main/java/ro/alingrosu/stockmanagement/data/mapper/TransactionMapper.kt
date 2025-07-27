@@ -4,9 +4,9 @@ import ro.alingrosu.stockmanagement.data.local.entity.ProductEntity
 import ro.alingrosu.stockmanagement.data.local.entity.SupplierEntity
 import ro.alingrosu.stockmanagement.data.local.entity.TransactionEntity
 import ro.alingrosu.stockmanagement.data.local.entity.TransactionWithProductEntity
-import ro.alingrosu.stockmanagement.data.service.dto.ProductDto
-import ro.alingrosu.stockmanagement.data.service.dto.SupplierDto
-import ro.alingrosu.stockmanagement.data.service.dto.TransactionDto
+import ro.alingrosu.stockmanagement.data.remote.dto.ProductDto
+import ro.alingrosu.stockmanagement.data.remote.dto.SupplierDto
+import ro.alingrosu.stockmanagement.data.remote.dto.TransactionDto
 import ro.alingrosu.stockmanagement.domain.model.Transaction
 import ro.alingrosu.stockmanagement.domain.model.TransactionType
 

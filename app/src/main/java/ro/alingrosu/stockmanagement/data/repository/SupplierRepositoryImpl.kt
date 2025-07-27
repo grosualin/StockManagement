@@ -9,7 +9,7 @@ import ro.alingrosu.stockmanagement.data.local.dao.SupplierDao
 import ro.alingrosu.stockmanagement.data.mapper.toDomain
 import ro.alingrosu.stockmanagement.data.mapper.toDto
 import ro.alingrosu.stockmanagement.data.mapper.toEntity
-import ro.alingrosu.stockmanagement.data.service.SupplierService
+import ro.alingrosu.stockmanagement.data.remote.SupplierService
 import ro.alingrosu.stockmanagement.domain.model.Supplier
 import ro.alingrosu.stockmanagement.domain.repository.SupplierRepository
 import javax.inject.Inject

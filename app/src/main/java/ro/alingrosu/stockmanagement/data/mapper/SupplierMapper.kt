@@ -1,7 +1,7 @@
 package ro.alingrosu.stockmanagement.data.mapper
 
 import ro.alingrosu.stockmanagement.data.local.entity.SupplierEntity
-import ro.alingrosu.stockmanagement.data.service.dto.SupplierDto
+import ro.alingrosu.stockmanagement.data.remote.dto.SupplierDto
 import ro.alingrosu.stockmanagement.domain.model.Supplier
 
 fun SupplierEntity.toDomain(): Supplier = Supplier(

@@ -10,10 +10,10 @@ import ro.alingrosu.stockmanagement.data.local.dao.TransactionDao
 import ro.alingrosu.stockmanagement.data.mapper.toDomain
 import ro.alingrosu.stockmanagement.data.mapper.toDto
 import ro.alingrosu.stockmanagement.data.mapper.toEntity
-import ro.alingrosu.stockmanagement.data.service.ProductService
-import ro.alingrosu.stockmanagement.data.service.SupplierService
-import ro.alingrosu.stockmanagement.data.service.TransactionService
-import ro.alingrosu.stockmanagement.data.service.dto.TransactionDto
+import ro.alingrosu.stockmanagement.data.remote.ProductService
+import ro.alingrosu.stockmanagement.data.remote.SupplierService
+import ro.alingrosu.stockmanagement.data.remote.TransactionService
+import ro.alingrosu.stockmanagement.data.remote.dto.TransactionDto
 import ro.alingrosu.stockmanagement.domain.model.Transaction
 import ro.alingrosu.stockmanagement.domain.repository.TransactionRepository
 import javax.inject.Inject

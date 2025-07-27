@@ -1,7 +1,7 @@
 package ro.alingrosu.stockmanagement.data.repository
 
 import io.reactivex.rxjava3.core.Single
-import ro.alingrosu.stockmanagement.data.service.AuthService
+import ro.alingrosu.stockmanagement.data.remote.AuthService
 import ro.alingrosu.stockmanagement.domain.repository.AuthRepository
 import javax.inject.Inject
 
