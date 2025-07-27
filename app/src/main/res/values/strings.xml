@@ -37,4 +37,12 @@
     <string name="phone">Phone</string>
     <string name="email">Email</string>
     <string name="address">Address</string>
+    <string name="product">Product</string>
+    <string name="quantity">Quantity</string>
+    <string name="notes">Notes</string>
+    <string name="product_not_selected">Please select a product!</string>
+    <string name="type_not_selected">Please select stock operation!</string>
+    <string name="qty_not_selected">Please insert a quantity!</string>
+    <string name="transaction_save_success">Transaction saved successfully!</string>
+    <string name="operation">Operation</string>
 </resources>

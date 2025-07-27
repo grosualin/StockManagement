@@ -49,8 +49,11 @@ class UseCasesModule {
 
     @Provides
     @Singleton
-    fun provideStockManagementUseCases(productRepository: ProductRepository): StockManagementUseCase {
-        return StockManagementUseCaseImpl(productRepository)
+    fun provideStockManagementUseCases(
+        productRepository: ProductRepository,
+        transactionRepository: TransactionRepository
+    ): StockManagementUseCase {
+        return StockManagementUseCaseImpl(productRepository, transactionRepository)
     }
 
     @Provides

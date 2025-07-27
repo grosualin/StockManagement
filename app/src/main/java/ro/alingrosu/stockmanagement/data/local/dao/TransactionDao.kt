@@ -20,6 +20,9 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(transactions: List<TransactionEntity>): Completable
 
+    @Query("SELECT MAX(id) FROM transactions")
+    fun getMaxId(): Single<Int>
+
     @Transaction
     @Query(
         """

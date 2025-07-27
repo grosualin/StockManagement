@@ -41,7 +41,15 @@ class ProductMockServiceImpl : ProductService {
     }
 
     override fun updateProduct(product: ProductDto): Completable {
-        return Completable.complete()
+        return Completable.create {
+            val idx = mockProducts.indexOfFirst { it.id == product.id }
+            if (idx != -1) {
+                mockProducts[idx] = product
+                it.onComplete()
+            } else {
+                it.onError(IllegalStateException("Product not found"))
+            }
+        }
             .delay(2, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
     }

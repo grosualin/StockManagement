@@ -2,7 +2,6 @@ package ro.alingrosu.stockmanagement.data.repository
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import ro.alingrosu.stockmanagement.data.local.dao.ProductDao
@@ -14,9 +13,7 @@ import ro.alingrosu.stockmanagement.data.mapper.toEntity
 import ro.alingrosu.stockmanagement.data.service.ProductService
 import ro.alingrosu.stockmanagement.data.service.SupplierService
 import ro.alingrosu.stockmanagement.data.service.TransactionService
-import ro.alingrosu.stockmanagement.data.service.dto.ProductDto
 import ro.alingrosu.stockmanagement.data.service.dto.TransactionDto
-import ro.alingrosu.stockmanagement.domain.model.Product
 import ro.alingrosu.stockmanagement.domain.model.Transaction
 import ro.alingrosu.stockmanagement.domain.repository.TransactionRepository
 import javax.inject.Inject
@@ -61,7 +58,14 @@ class TransactionRepositoryImpl @Inject constructor(
 
     override fun addTransaction(transaction: Transaction): Completable {
         return remoteDataSourceTransaction.postTransaction(transaction.toDto())
-            .andThen(localDataSourceTransaction.insertTransaction(transaction.toEntity()))
+            .andThen(
+                localDataSourceTransaction.getMaxId()
+                    .map { maxId -> maxId + 1 }
+                    .flatMapCompletable { nextId ->
+                        val transactionWithId = transaction.toEntity().copy(id = nextId)
+                        localDataSourceTransaction.insertTransaction(transactionWithId).onErrorComplete()
+                    }
+            )
             .subscribeOn(Schedulers.io())
     }
 
