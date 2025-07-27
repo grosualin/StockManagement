@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.jakewharton.rxbinding4.appcompat.queryTextChanges
 import com.jakewharton.rxbinding4.view.clicks
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ro.alingrosu.stockmanagement.R
 import ro.alingrosu.stockmanagement.databinding.FragmentSupplierListBinding
 import ro.alingrosu.stockmanagement.presentation.model.SupplierUi
@@ -71,32 +70,34 @@ class SupplierListFragment : BaseFragment(R.layout.fragment_supplier_list) {
     }
 
     override fun listenFoUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is UiState.Loading -> {
-                    binding.apply {
-                        rvSuppliers.isVisible = false
-                        tvEmpty.isVisible = false
-                        loading.isVisible = true
+        viewModel.uiState.observe(viewLifecycleOwner) { event ->
+            event.contentIfNotHandled?.let { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        binding.apply {
+                            rvSuppliers.isVisible = false
+                            tvEmpty.isVisible = false
+                            loading.isVisible = true
+                        }
                     }
-                }
 
-                is UiState.Success -> {
-                    binding.apply {
-                        rvSuppliers.isVisible = uiState.data.isNotEmpty()
-                        tvEmpty.isVisible = uiState.data.isEmpty()
-                        loading.isVisible = false
+                    is UiState.Success -> {
+                        binding.apply {
+                            rvSuppliers.isVisible = uiState.data.isNotEmpty()
+                            tvEmpty.isVisible = uiState.data.isEmpty()
+                            loading.isVisible = false
+                        }
+                        supplierAdapter.submitList(uiState.data)
                     }
-                    supplierAdapter.submitList(uiState.data)
-                }
 
-                is UiState.Error -> {
-                    binding.apply {
-                        rvSuppliers.isVisible = false
-                        tvEmpty.isVisible = true
-                        loading.isVisible = false
+                    is UiState.Error -> {
+                        binding.apply {
+                            rvSuppliers.isVisible = false
+                            tvEmpty.isVisible = true
+                            loading.isVisible = false
+                        }
+                        Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
                     }
-                    Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
                 }
             }
         }

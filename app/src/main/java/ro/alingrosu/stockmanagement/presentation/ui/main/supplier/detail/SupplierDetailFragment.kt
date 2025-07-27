@@ -51,21 +51,23 @@ class SupplierDetailFragment : BaseFragment(R.layout.fragment_supplier_detail) {
     }
 
     override fun listenFoUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is UiState.Loading -> {
-                    binding.buttonSave.setLoading(true)
-                }
+        viewModel.uiState.observe(viewLifecycleOwner) { event ->
+            event.contentIfNotHandled?.let { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        binding.buttonSave.setLoading(true)
+                    }
 
-                is UiState.Success -> {
-                    binding.buttonSave.setLoading(false)
-                    Toast.makeText(context, getString(R.string.product_save_success), Toast.LENGTH_LONG).show()
-                    findNavController().popBackStack()
-                }
+                    is UiState.Success -> {
+                        binding.buttonSave.setLoading(false)
+                        Toast.makeText(context, getString(R.string.product_save_success), Toast.LENGTH_LONG).show()
+                        findNavController().popBackStack()
+                    }
 
-                is UiState.Error -> {
-                    binding.buttonSave.setLoading(false)
-                    Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+                    is UiState.Error -> {
+                        binding.buttonSave.setLoading(false)
+                        Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }

@@ -43,26 +43,28 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     }
 
     override fun listenFoUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is UiState.Loading -> {
-                    binding.buttonLogin.setLoading(true)
-                }
-
-                is UiState.Success -> {
-                    binding.buttonLogin.setLoading(false)
-                    Toast.makeText(context, "Login success: ${uiState.data}", Toast.LENGTH_LONG).show()
-
-                    if (uiState.data == true) {
-                        val mainActivity = Intent(requireContext(), MainActivity::class.java)
-                        startActivity(mainActivity)
-                        requireActivity().finish()
+        viewModel.uiState.observe(viewLifecycleOwner) { event ->
+            event.contentIfNotHandled?.let { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        binding.buttonLogin.setLoading(true)
                     }
-                }
 
-                is UiState.Error -> {
-                    binding.buttonLogin.setLoading(false)
-                    Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+                    is UiState.Success -> {
+                        binding.buttonLogin.setLoading(false)
+                        Toast.makeText(context, "Login success: ${uiState.data}", Toast.LENGTH_LONG).show()
+
+                        if (uiState.data == true) {
+                            val mainActivity = Intent(requireContext(), MainActivity::class.java)
+                            startActivity(mainActivity)
+                            requireActivity().finish()
+                        }
+                    }
+
+                    is UiState.Error -> {
+                        binding.buttonLogin.setLoading(false)
+                        Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }

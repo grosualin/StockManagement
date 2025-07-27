@@ -8,15 +8,17 @@ import ro.alingrosu.stockmanagement.domain.usecase.DashboardUseCase
 import ro.alingrosu.stockmanagement.presentation.mapper.toUiModel
 import ro.alingrosu.stockmanagement.presentation.model.DashboardUiModel
 import ro.alingrosu.stockmanagement.presentation.state.UiState
+import ro.alingrosu.stockmanagement.presentation.state.UiState.Loading.asEvent
 import ro.alingrosu.stockmanagement.presentation.ui.base.BaseViewModel
+import ro.alingrosu.stockmanagement.presentation.util.Event
 import javax.inject.Inject
 
 class DashboardViewModel @Inject constructor(
     private val dashboardUseCase: DashboardUseCase
 ) : BaseViewModel() {
 
-    private val _uiState = MutableLiveData<UiState<DashboardUiModel>>()
-    val uiState: LiveData<UiState<DashboardUiModel>> = _uiState
+    private val _uiState = MutableLiveData<Event<UiState<DashboardUiModel>>>()
+    val uiState: LiveData<Event<UiState<DashboardUiModel>>> = _uiState
 
     fun loadData() {
         compositeDisposable.add(
@@ -27,15 +29,15 @@ class DashboardViewModel @Inject constructor(
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    _uiState.value = UiState.Loading
+                    _uiState.value = UiState.Loading.asEvent()
                 }
                 .doOnError { error ->
-                    _uiState.value = UiState.Error(error.message ?: "Unknown error")
+                    _uiState.value = UiState.Error(error.message ?: "Unknown error").asEvent()
                 }
                 .subscribe({
-                    _uiState.value = UiState.Success(it)
+                    _uiState.value = UiState.Success(it).asEvent()
                 }, { error ->
-                    _uiState.value = UiState.Error(error.message ?: "Unexpected error occurred")
+                    _uiState.value = UiState.Error(error.message ?: "Unexpected error occurred").asEvent()
                 })
         )
     }

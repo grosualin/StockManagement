@@ -8,15 +8,17 @@ import ro.alingrosu.stockmanagement.domain.usecase.SupplierUseCase
 import ro.alingrosu.stockmanagement.presentation.mapper.toUiModel
 import ro.alingrosu.stockmanagement.presentation.model.SupplierUi
 import ro.alingrosu.stockmanagement.presentation.state.UiState
+import ro.alingrosu.stockmanagement.presentation.state.UiState.Loading.asEvent
 import ro.alingrosu.stockmanagement.presentation.ui.base.BaseViewModel
+import ro.alingrosu.stockmanagement.presentation.util.Event
 import javax.inject.Inject
 
 class SupplierListViewModel @Inject constructor(
     private val supplierUseCase: SupplierUseCase
 ) : BaseViewModel() {
 
-    private val _uiState = MutableLiveData<UiState<List<SupplierUi>>>()
-    val uiState: LiveData<UiState<List<SupplierUi>>> = _uiState
+    private val _uiState = MutableLiveData<Event<UiState<List<SupplierUi>>>>()
+    val uiState: LiveData<Event<UiState<List<SupplierUi>>>> = _uiState
 
 
     fun fetchSuppliers(query: String) {
@@ -30,15 +32,15 @@ class SupplierListViewModel @Inject constructor(
                 .map { it.toUiModel() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    _uiState.value = UiState.Loading
+                    _uiState.value = UiState.Loading.asEvent()
                 }
                 .doOnError { error ->
-                    _uiState.value = UiState.Error(error.message ?: "Unknown error")
+                    _uiState.value = UiState.Error(error.message ?: "Unknown error").asEvent()
                 }
                 .subscribe({
-                    _uiState.value = UiState.Success(it)
+                    _uiState.value = UiState.Success(it).asEvent()
                 }, { error ->
-                    _uiState.value = UiState.Error(error.message ?: "Unexpected error occurred")
+                    _uiState.value = UiState.Error(error.message ?: "Unexpected error occurred").asEvent()
                 })
         )
     }

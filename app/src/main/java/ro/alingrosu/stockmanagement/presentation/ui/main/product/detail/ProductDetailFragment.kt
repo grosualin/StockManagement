@@ -56,21 +56,23 @@ class ProductDetailFragment : BaseFragment(R.layout.fragment_product_detail) {
     }
 
     override fun listenFoUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is UiState.Loading -> {
-                    binding.buttonSave.setLoading(true)
-                }
+        viewModel.uiState.observe(viewLifecycleOwner) { event ->
+            event.contentIfNotHandled?.let { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        binding.buttonSave.setLoading(true)
+                    }
 
-                is UiState.Success -> {
-                    binding.buttonSave.setLoading(false)
-                    Toast.makeText(context, getString(R.string.product_save_success), Toast.LENGTH_LONG).show()
-                    findNavController().popBackStack()
-                }
+                    is UiState.Success -> {
+                        binding.buttonSave.setLoading(false)
+                        Toast.makeText(context, getString(R.string.product_save_success), Toast.LENGTH_LONG).show()
+                        findNavController().popBackStack()
+                    }
 
-                is UiState.Error -> {
-                    binding.buttonSave.setLoading(false)
-                    Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+                    is UiState.Error -> {
+                        binding.buttonSave.setLoading(false)
+                        Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -111,17 +113,16 @@ class ProductDetailFragment : BaseFragment(R.layout.fragment_product_detail) {
 
             binding.acSupplier.setAdapter(adapter)
             binding.acSupplier.isEnabled = true
-
-            compositeDisposable.add(
-                binding.acSupplier.itemClickEvents()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ event ->
-                        selectedSupplier = viewModel.suppliers.value?.get(event.position)
-                    }, { error ->
-                        error.printStackTrace()
-                    })
-            )
         }
+        compositeDisposable.add(
+            binding.acSupplier.itemClickEvents()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ event ->
+                    selectedSupplier = viewModel.suppliers.value?.get(event.position)
+                }, { error ->
+                    error.printStackTrace()
+                })
+        )
         viewModel.fetchSuppliers()
 
         binding.etCurrentStock.isEnabled = true

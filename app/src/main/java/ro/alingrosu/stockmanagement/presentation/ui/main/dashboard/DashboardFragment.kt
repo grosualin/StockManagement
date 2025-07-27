@@ -43,42 +43,44 @@ class DashboardFragment : BaseFragment(R.layout.fragment_dashboard) {
     }
 
     override fun listenFoUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is UiState.Loading -> {
-                    binding.apply {
-                        rvLowStockItems.isVisible = false
-                        rvRecentTransactions.isVisible = false
-                        tvLowStockItemsEmpty.isVisible = false
-                        tvRecentTransactionsEmpty.isVisible = false
-                        loadingRecentTransactions.isVisible = true
-                        loadingLowStockItems.isVisible = true
+        viewModel.uiState.observe(viewLifecycleOwner) { event ->
+            event.contentIfNotHandled?.let { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        binding.apply {
+                            rvLowStockItems.isVisible = false
+                            rvRecentTransactions.isVisible = false
+                            tvLowStockItemsEmpty.isVisible = false
+                            tvRecentTransactionsEmpty.isVisible = false
+                            loadingRecentTransactions.isVisible = true
+                            loadingLowStockItems.isVisible = true
+                        }
                     }
-                }
 
-                is UiState.Success -> {
-                    binding.apply {
-                        rvLowStockItems.isVisible = uiState.data.lowStockItems.isNotEmpty()
-                        rvRecentTransactions.isVisible = uiState.data.recentTransactions.isNotEmpty()
-                        tvLowStockItemsEmpty.isVisible = uiState.data.lowStockItems.isEmpty()
-                        tvRecentTransactionsEmpty.isVisible = uiState.data.recentTransactions.isEmpty()
-                        loadingRecentTransactions.isVisible = false
-                        loadingLowStockItems.isVisible = false
+                    is UiState.Success -> {
+                        binding.apply {
+                            rvLowStockItems.isVisible = uiState.data.lowStockItems.isNotEmpty()
+                            rvRecentTransactions.isVisible = uiState.data.recentTransactions.isNotEmpty()
+                            tvLowStockItemsEmpty.isVisible = uiState.data.lowStockItems.isEmpty()
+                            tvRecentTransactionsEmpty.isVisible = uiState.data.recentTransactions.isEmpty()
+                            loadingRecentTransactions.isVisible = false
+                            loadingLowStockItems.isVisible = false
+                        }
+                        productAdapter.submitList(uiState.data.lowStockItems.map { DashboardListItem.ProductListItem(it) })
+                        transactionAdapter.submitList(uiState.data.recentTransactions.map { DashboardListItem.TransactionListItem(it) })
                     }
-                    productAdapter.submitList(uiState.data.lowStockItems.map { DashboardListItem.ProductListItem(it) })
-                    transactionAdapter.submitList(uiState.data.recentTransactions.map { DashboardListItem.TransactionListItem(it) })
-                }
 
-                is UiState.Error -> {
-                    binding.apply {
-                        rvLowStockItems.isVisible = false
-                        rvRecentTransactions.isVisible = false
-                        tvLowStockItemsEmpty.isVisible = true
-                        tvRecentTransactionsEmpty.isVisible = true
-                        loadingRecentTransactions.isVisible = false
-                        loadingLowStockItems.isVisible = false
+                    is UiState.Error -> {
+                        binding.apply {
+                            rvLowStockItems.isVisible = false
+                            rvRecentTransactions.isVisible = false
+                            tvLowStockItemsEmpty.isVisible = true
+                            tvRecentTransactionsEmpty.isVisible = true
+                            loadingRecentTransactions.isVisible = false
+                            loadingLowStockItems.isVisible = false
+                        }
+                        Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
                     }
-                    Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
                 }
             }
         }

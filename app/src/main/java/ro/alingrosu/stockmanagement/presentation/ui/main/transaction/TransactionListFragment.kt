@@ -56,32 +56,34 @@ class TransactionListFragment : BaseFragment(R.layout.fragment_transaction_list)
     }
 
     override fun listenFoUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is UiState.Loading -> {
-                    binding.apply {
-                        rvTransaction.isVisible = false
-                        tvEmpty.isVisible = false
-                        loading.isVisible = true
+        viewModel.uiState.observe(viewLifecycleOwner) { event ->
+            event.contentIfNotHandled?.let { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> {
+                        binding.apply {
+                            rvTransaction.isVisible = false
+                            tvEmpty.isVisible = false
+                            loading.isVisible = true
+                        }
                     }
-                }
 
-                is UiState.Success -> {
-                    binding.apply {
-                        rvTransaction.isVisible = uiState.data.isNotEmpty()
-                        tvEmpty.isVisible = uiState.data.isEmpty()
-                        loading.isVisible = false
+                    is UiState.Success -> {
+                        binding.apply {
+                            rvTransaction.isVisible = uiState.data.isNotEmpty()
+                            tvEmpty.isVisible = uiState.data.isEmpty()
+                            loading.isVisible = false
+                        }
+                        transactionAdapter.submitList(uiState.data)
                     }
-                    transactionAdapter.submitList(uiState.data)
-                }
 
-                is UiState.Error -> {
-                    binding.apply {
-                        rvTransaction.isVisible = false
-                        tvEmpty.isVisible = true
-                        loading.isVisible = false
+                    is UiState.Error -> {
+                        binding.apply {
+                            rvTransaction.isVisible = false
+                            tvEmpty.isVisible = true
+                            loading.isVisible = false
+                        }
+                        Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
                     }
-                    Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
