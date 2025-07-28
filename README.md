@@ -51,11 +51,21 @@ The app follows Clean Architecture principles and the MVVM architecture, using R
 The app has the following structure and layers:
 
 - Presentation Layer : UI, ViewModels, Models, State (LiveData, RxJava), Custom Views 
+  - Responsible for displaying data and handling user interactions.
+  - Uses usecases to interact with data and maps domain model to ui models.
 - Domain Layer: UseCases, Interfaces, Business Models
-- Data Layer:
-  - Local (Room DB, DAOs, Entities)
-  - Remote (API services, DTOs)
-  - Mappers
+  - Holds usecases and business models.
+  - Responsible for business logic and data processing.
+  - A usecase combines one or multiple repositories and performs a specific business operation by implementing business logic.
+  - Maps data models to domain models.
+- Data Layer: Local (Room DB, DAOs, Entities), Remote (API services, DTOs), Mappers
+  - Two data sources: local DB and remote (mocked api service)
+  - Responsible for fetching and storing data.
+- Dependency Injection: Modules, Components
+  - Provides a mechanism for injecting dependencies into classes.
+  - Uses Dagger 3 for dependency injection.
+  - A module tells Dagger how to provide dependencies to other objects.
+  - A component tells Dagger which modules to use in order to create objects.
 
 ## Tech Stack:
 - Kotlin 2.2+
